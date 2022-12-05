@@ -1,0 +1,23 @@
+Classes:
+
+01 - RegisterFile 
+02 - Register 
+03 - ReservationStation
+04 - Reservation 
+05 - ReservationID 
+06 - Program (instructionQueue)  
+07 - Memory 
+08 - Instruction 
+09 - LoadBuffers 
+10 - LoadBuffer
+11 - StoreBuffer 
+12 - StoreBuffers 
+
+
+
+
+enums : 
+1 - Op
+2 - InstructionType
+3 - ReservationStationType
+4 - BranchType
