@@ -5,11 +5,11 @@ public class Reservation {
 	Op op;
 	double Vj;
 	double Vk;
-	double Qj;
-	double Qk;
-	double A;
+	ReservationID Qj;
+	ReservationID Qk;
+	int A;
 
-	public Reservation(ReservationID ID, boolean busy, Op op, double vj, double vk, double qj, double qk, double a) {
+	public Reservation(ReservationID ID, boolean busy, Op op, double vj, double vk, ReservationID qj, ReservationID qk, int a) {
 		this.ID = ID;
 		this.busy = busy;
 		this.op = op;
@@ -65,27 +65,27 @@ public class Reservation {
 		Vk = vk;
 	}
 
-	public double getQj() {
+	public ReservationID getQj() {
 		return Qj;
 	}
 
-	public void setQj(double qj) {
+	public void setQj(ReservationID qj) {
 		Qj = qj;
 	}
 
-	public double getQk() {
+	public ReservationID getQk() {
 		return Qk;
 	}
 
-	public void setQk(double qk) {
+	public void setQk(ReservationID qk) {
 		Qk = qk;
 	}
 
-	public double getA() {
+	public int getA() {
 		return A;
 	}
 
-	public void setA(double a) {
+	public void setA(int a) {
 		A = a;
 	}
 
