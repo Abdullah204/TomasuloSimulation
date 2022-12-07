@@ -28,7 +28,6 @@ public class Processor {
 	public void next() {
 		if (tryIssue())
 			pc++;
-		checkExecution();
 		checkPublish();
 		checkBus();
 		printCycle();
@@ -36,15 +35,13 @@ public class Processor {
 		return;
 	}
 
+	// checks if any reservation needs data on bus and assign it
 	public void checkBus() {
 
 	}
 
+	// checks if any instruction finished execution and publishes result on bus
 	public void checkPublish() {
-
-	}
-
-	public void checkExecution() {
 
 	}
 
