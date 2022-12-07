@@ -1,4 +1,0 @@
-
-public enum BranchType {
-	EQUALZERO,NOTEQUALZERO,NOTEQUAL,EQUAL
-}

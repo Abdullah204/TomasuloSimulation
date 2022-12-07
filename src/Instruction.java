@@ -1,18 +1,65 @@
 
 public class Instruction {
 	InstructionType instructionType;
-	BranchType branchType;
-	int rs;
-	int rt;
-	int rd;
+	String rs;
+	String rt;
+	String rd;
 	int offset;
 
-	public Instruction(InstructionType instructionType, BranchType branchType, int rs, int rt, int rd, int offset) {
+	public Instruction() {
+
+	}
+
+	public Instruction(InstructionType instructionType, String rs, String rt, String rd, int offset) {
 		this.instructionType = instructionType;
-		this.branchType = branchType;
 		this.rs = rs;
 		this.rt = rt;
 		this.rd = rd;
 		this.offset = offset;
 	}
+
+	public InstructionType getInstructionType() {
+		return instructionType;
+	}
+
+	public void setInstructionType(InstructionType instructionType) {
+		this.instructionType = instructionType;
+	}
+
+	public String getRs() {
+		return rs;
+	}
+
+	public void setRs(String rs) {
+		this.rs = rs;
+	}
+
+	public String getRt() {
+		return rt;
+	}
+
+	public void setRt(String rt) {
+		this.rt = rt;
+	}
+
+	public String getRd() {
+		return rd;
+	}
+
+	public void setRd(String rd) {
+		this.rd = rd;
+	}
+
+	public int getOffset() {
+		return offset;
+	}
+
+	public void setOffset(int offset) {
+		this.offset = offset;
+	}
+
+	public String toString() {
+		return "type: " + instructionType + " rs: " + rs + " rt: " + rt + " rd: " + rd + " offset: " + offset;
+	}
+
 }

@@ -13,4 +13,11 @@ public class Program {
 	public void setInstructionQueue(Instruction[] instructionQueue) {
 		this.instructionQueue = instructionQueue;
 	}
+	public String toString() {
+		String s = "";
+		for(Instruction i : instructionQueue) {
+			s+=i.toString()+"\n";
+		}
+		return s;
+	}
 }

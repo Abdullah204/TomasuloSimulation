@@ -2,6 +2,17 @@
 public class LoadBuffer {
 	ReservationID ID;
 	int A;
+	boolean busy;
+	public boolean isBusy() {
+		return busy;
+	}
+
+
+	public void setBusy(boolean busy) {
+		this.busy = busy;
+	}
+
+
 	public LoadBuffer(ReservationID ID, int A) {
 		this.ID = ID;
 		this.A = A;
