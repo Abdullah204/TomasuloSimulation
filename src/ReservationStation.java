@@ -3,6 +3,7 @@ public class ReservationStation {
 	Reservation station[];
 	StationType type;
 	int latency;
+	int size;
 	public ReservationStation(int size, StationType type,int latency) {
 		this.latency = latency;
 		station = new Reservation[size];
@@ -11,6 +12,7 @@ public class ReservationStation {
 			ReservationID reservationID = new ReservationID(type, i+1);
 			station[i] = new Reservation(reservationID);
 		}
+		this.size = 0;
 	}
 
 	public Reservation[] getStation() {

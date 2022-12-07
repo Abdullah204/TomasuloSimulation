@@ -4,6 +4,7 @@ public class LoadBuffers {
 	LoadBuffer station[];
 	StationType type;
 	int latency;
+	int size;
 
 	public LoadBuffers(int size, int  latency) {
 		station = new LoadBuffer[size];
@@ -13,6 +14,7 @@ public class LoadBuffers {
 			station[i] = new LoadBuffer(reservationID);
 		}
 		this.latency = latency;
+		size = 0;
 	}
 
 	public LoadBuffer[] getStation() {

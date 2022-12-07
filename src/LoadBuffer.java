@@ -3,6 +3,7 @@ public class LoadBuffer {
 	ReservationID ID;
 	int A;
 	boolean busy;
+	int index;
 	public boolean isBusy() {
 		return busy;
 	}

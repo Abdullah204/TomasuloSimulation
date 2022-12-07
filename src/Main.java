@@ -13,6 +13,9 @@ public class Main {
 		ReservationID r2 = new ReservationID(StationType.ADD, 1);
 		System.out.println(r1.equals(r2));
 		
+		
+		
+		
 	}
 
 }

@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class Processor {
 	Program program;
@@ -81,11 +83,217 @@ public class Processor {
 			}
 		}
 	}
+	
+	public void getFinished(ArrayList<Object>finishedSlots, int x) //Load Add Mul
+	{
+		ReservationStation curr = (x == 0)? addStation : (x == 1)? mulStation : null;
+		if(curr != null)
+		{
+			for(Reservation res : curr.getStation())
+			{
+				if(program.getInstructionQueue()[res.index].getEndExec() <= cycle)
+				{
+					//This one can be considered as a finsihed instruction 
+					finishedSlots.add(res);
+				}
+			}
+			
+		}
+		else
+		{
+			for(LoadBuffer lodB : lb.getStation())
+			{
+				if(program.getInstructionQueue()[lodB.index].getEndExec() <= cycle)
+				{
+					finishedSlots.add(lodB);
+				}
+			}
+		}
+		
+	}
 
 	// checks if any instruction finished execution and publishes result on bus
 	public void checkPublish() {
+		//Loop over all the Stations
+		//If any instruction in any station has endExec == currCycle:
+		//       for each instruction loop over all other instructions(stations count dependencies (store + add + mul) then get Max)
+		ArrayList<Object> finishedSlots = new ArrayList<Object>();
+		for(int i = 0; i < 3; ++i)
+		{
+			getFinished(finishedSlots, i);//return arrayList of reservations
+		}
 		
+		int max = Integer.MIN_VALUE; //mx 
+		ArrayList<Integer> dependencies = new ArrayList<Integer>();
+		
+		for(Object x : finishedSlots) //Count in the loop
+		{
+			if(x.getClass().getSimpleName().equals("Reservation")) //pc instruction has station of the this finiished ++
+			{
+				int cnt = 0;
+				cnt = (countDependencies(((Reservation)x).getID()));
+				//my type is Reservation
+				Op operation = ((Reservation)x).getOp();
+				InstructionType needToBeAdded = program.getInstructionQueue()[pc].getInstructionType();
+				if(needToBeAdded == InstructionType.ADD || needToBeAdded == InstructionType.SUB)
+				{
+					if(operation == Op.ADD || operation == Op.SUB)
+					{
+						//We are on the same type
+						cnt += (addStation.size >= addStation.getStation().length)? 1:0;
+					}
+				}
+				if(needToBeAdded == InstructionType.MUL || needToBeAdded == InstructionType.DIV)
+				{
+					if(operation == Op.MUL || operation == Op.DIV)
+					{
+						//We are on the same type
+						cnt += (mulStation.size >= mulStation.getStation().length)? 1:0;
+					}
+				}
+				dependencies.add(cnt);
+			}
+			else {
+				
+				int cnt = (countDependencies(((LoadBuffer)x).getID()));
+				InstructionType needToBeAdded = program.getInstructionQueue()[pc].getInstructionType();
+				if(needToBeAdded == InstructionType.LOAD)
+				{
+					cnt += (lb.size >= lb.getStation().length)? 1:0;
+				}
+				dependencies.add(cnt);
+			}
 
+		}
+		//Get Max from the count
+		Integer maxVal = Collections.max(dependencies);
+		Integer maxIdx = dependencies.indexOf(maxVal);
+		
+		
+		//Now iam Published
+		publish(finishedSlots.get(maxIdx));
+	
+		//Old Comments if i missed something (Hussein Ebrahim)
+		//.///////////////Publish on BUS
+		////////////GET the Value
+		//bus.value = result;
+
+	}
+
+	public void publish(Object x) {
+		
+		String operation = (x.getClass().getSimpleName().equals("Reservation"))? ((Reservation)x).getOp()+"" : "LD";
+		/*
+		  This One Made the 4 targets
+		  1- Write on BUS (Value and ID)
+		  2- Nullify the Register File if possible and write data there
+		  3- Busy False
+		  4- size--
+		  
+		 */
+		getResult(operation, x);
+		
+	}
+
+	public void getResult(String op, Object slot) {
+		
+		String rd = "";
+		ReservationID id = null;
+		double result = 0;
+		
+		switch(op)
+		{
+		case "LD" :
+			result = memory.getArr()[((LoadBuffer)slot).getA()];
+			//check on Register File write it there and nullify the tag if no one has overriden it
+			//ABDOU ASK HIM ABOUT THIS FIRST
+			//ASSUMPTION THE LOAD INSTRUCTIONS ALWAYS LOAD IN FLOATINGPOINT REGISTER 
+			
+			//now set the result in the register file and check if this register is now done
+			
+			lb.size--; //Decrease Size of the LOAD BUFFERS as this one is saaying BYE BYE 
+			rd = program.getInstructionQueue()[((LoadBuffer)slot).index].getRd();
+			return ;
+		
+		case "ADD" :
+			addStation.size--;
+			//Set 
+			
+			result = ((Reservation)slot).getVj() + ((Reservation)slot).getVk();
+			rd = program.getInstructionQueue()[((Reservation)slot).index].getRd();
+			return ;
+		case "SUB":
+			addStation.size--;
+			result = ((Reservation)slot).getVj() - ((Reservation)slot).getVk();
+			rd = program.getInstructionQueue()[((Reservation)slot).index].getRd();
+			return ;
+		case "MUL":
+			mulStation.size--;
+			result = ((Reservation)slot).getVj() * ((Reservation)slot).getVk();
+			rd = program.getInstructionQueue()[((Reservation)slot).index].getRd();
+			return ;
+		case "DIV":
+			mulStation.size--;
+			result = ((Reservation)slot).getVj() / ((Reservation)slot).getVk();
+			rd = program.getInstructionQueue()[((Reservation)slot).index].getRd();
+			return ;
+		}
+		
+		//Make the slot busy back to false 
+		if(slot.getClass().getSimpleName().equals("Reservation")) 
+		{
+			((Reservation)slot).setBusy(false);
+		}
+		else
+			((LoadBuffer)slot).setBusy(false);
+		
+		
+		//Now i have the operation Result and the RD of the slot that will be removed 
+		
+		//GET the registerIndex
+		int targetIdx = getRegisterIndex(rd);
+		
+		//set the result value in the register file now (Trash because if the register need something else in Q overriden it will never be used but i will put it anyways)
+		rf.setValueFloating(targetIdx, result);
+		
+		//check over the Q of the targetRegister in RF if the Q is same as my slot then it will be nullified otherwise DONT TOUCH ART
+		if(rf.getQiFloating(targetIdx).equals(id))
+			rf.setQiFloating(targetIdx, null);
+		
+		
+		//FINALLYY PUT ON THE BUS THE VALUE OF RESULT + ID OF SLOT
+		bus.setValue(result);
+		bus.sourceID = id;
+		
+		return;
+	}
+
+	public Integer countDependencies(ReservationID id) {
+		// TODO Auto-generated method stub
+		int ans = 0;
+		for(Reservation res : addStation.getStation())
+		{
+			if(res.getQj().equals(id) || res.getQk().equals(id))
+			{
+				ans++; //RAW Dependency
+			}
+		}
+		for(Reservation res : mulStation.getStation())
+		{
+			if(res.getQj().equals(id) || res.getQk().equals(id))
+			{
+				ans++; //RAW Dependency
+			}
+		}
+		for(StoreBuffer res : sb.getStation())
+		{
+			if(res.getQ().equals(id))
+			{
+				ans++; //RAW Dependency
+			}
+		}
+		
+		return ans;
 	}
 
 	public void checkExecution() {
@@ -166,6 +374,7 @@ public class Processor {
 			Reservation res = station.getStation()[i];
 			if (!res.busy) {
 				res.setBusy(true);
+				station.size++;
 				res.op = op;
 				prepareInstructionArithmetic(program.instructionQueue[pc], res);
 				return true;
@@ -273,6 +482,7 @@ public class Processor {
 			LoadBuffer buffer = lb.getStation()[i];
 			if (!buffer.busy) {
 				buffer.setBusy(true);
+				lb.size++;
 				prepareInstructionLoad(program.instructionQueue[pc], buffer);
 				return true;
 
