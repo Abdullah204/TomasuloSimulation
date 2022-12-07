@@ -12,6 +12,8 @@ Classes:
 10 - LoadBuffer
 11 - StoreBuffer 
 12 - StoreBuffers 
+13 - Parser
+14 - Bus
 
 
 

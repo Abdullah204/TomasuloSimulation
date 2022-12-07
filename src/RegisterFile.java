@@ -6,6 +6,11 @@ public class RegisterFile {
 	public RegisterFile() {
 		floating = new Register[32];
 		integer = new Register[32];
+		for(int i = 0 ; i <32 ; i++) {
+			floating[i] = new Register(0,null);
+			integer[i] = new Register(0,null);
+			
+		}
 	}
 
 	public Register[] getFloating() {
@@ -49,8 +54,8 @@ public class RegisterFile {
 	}
 	
 	
-	public double getValueInteger(int index) {
-		return integer[index].value;
+	public int getValueInteger(int index) {
+		return (int)integer[index].value;
 	}
 
 	public void setValueInteger(int index, double value) {

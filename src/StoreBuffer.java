@@ -3,7 +3,7 @@ public class StoreBuffer {
 	boolean busy;
 	int A;
 	double v;
-	ReservationID ID;
+	ReservationID Q;
 
 	public boolean isBusy() {
 		return busy;
@@ -20,13 +20,14 @@ public class StoreBuffer {
 	public void setV(double v) {
 		this.v = v;
 	}
+	
 
 	public ReservationID getID() {
-		return ID;
+		return Q;
 	}
 
-	public void setQ(ReservationID ID) {
-		this.ID = ID;
+	public void setQ(ReservationID Q) {
+		this.Q = Q;
 	}
 
 	public StoreBuffer(int A) {

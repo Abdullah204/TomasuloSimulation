@@ -1,11 +1,17 @@
 
 public class StoreBuffers {
-	StoreBuffer buffer[];
+	StoreBuffer station[];
 	public StoreBuffers(int size) {
-		buffer = new StoreBuffer[size];
+		station = new StoreBuffer[size];
 		for(int i = 0 ; i  < size ; i++) {
-			buffer[i] = new StoreBuffer();
+			station[i] = new StoreBuffer();
 		}
 }
+	public StoreBuffer[] getStation() {
+		return station;
+	}
+	public void setStation(StoreBuffer[] station) {
+		this.station = station;
+	}
 
 }

@@ -5,6 +5,9 @@ public class Instruction {
 	String rt;
 	String rd;
 	int offset;
+	int startExec;
+	int endExec;
+	
 
 	public Instruction() {
 
@@ -60,6 +63,22 @@ public class Instruction {
 
 	public String toString() {
 		return "type: " + instructionType + " rs: " + rs + " rt: " + rt + " rd: " + rd + " offset: " + offset;
+	}
+	
+	public int getStartExec() {
+		return startExec;
+	}
+
+	public void setStartExec(int startExec) {
+		this.startExec = startExec;
+	}
+
+	public int getEndExec() {
+		return endExec;
+	}
+
+	public void setEndExec(int endExec) {
+		this.endExec = endExec;
 	}
 
 }

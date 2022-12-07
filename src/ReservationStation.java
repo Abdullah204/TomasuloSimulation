@@ -2,12 +2,13 @@
 public class ReservationStation {
 	Reservation station[];
 	StationType type;
-
-	public ReservationStation(int size, StationType type) {
+	int latency;
+	public ReservationStation(int size, StationType type,int latency) {
+		this.latency = latency;
 		station = new Reservation[size];
 		this.type = type;
 		for (int i = 0; i < size; i++) {
-			ReservationID reservationID = new ReservationID(type, i);
+			ReservationID reservationID = new ReservationID(type, i+1);
 			station[i] = new Reservation(reservationID);
 		}
 	}
@@ -26,5 +27,13 @@ public class ReservationStation {
 
 	public void setType(StationType type) {
 		this.type = type;
+	}
+	
+	public String toString() {
+		String s = "";
+		for (int i = 0; i < station.length; i++) {
+			s+= station[i].toString() + "\n";
+		}
+		return s;
 	}
 }

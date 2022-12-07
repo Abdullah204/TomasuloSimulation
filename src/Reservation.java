@@ -8,6 +8,7 @@ public class Reservation {
 	ReservationID Qj;
 	ReservationID Qk;
 	int A;
+	int index;
 
 	public Reservation(ReservationID ID, boolean busy, Op op, double vj, double vk, ReservationID qj, ReservationID qk, int a) {
 		this.ID = ID;
@@ -87,6 +88,29 @@ public class Reservation {
 
 	public void setA(int a) {
 		A = a;
+	}
+	
+	public String toString() {
+//		ReservationID ID;
+//		boolean busy;
+//		Op op;
+//		double Vj;
+//		double Vk;
+//		ReservationID Qj;
+//		ReservationID Qk;
+//		int A;
+//		int index;
+		String s = "";
+		s+= "ID: " + ID + " ";
+		s+= "busy: " + busy + " ";
+		s+= "op: "+ op+ " ";
+		s+= "Vj: " + Vj + " ";
+		s+= "Vk: " + Vk + " ";
+		s+= "Qj: " + Qj + " ";
+		s+= "Qk: " + Qk + " ";
+		s+= "A: " + A + " ";
+		s+= "index: " + index + " ";
+		return s;
 	}
 
 }
