@@ -20,5 +20,6 @@ public class Bus {
 	public void setValue(double value) {
 		this.value = value;
 	}
+	
 
 }

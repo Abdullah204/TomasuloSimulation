@@ -22,7 +22,6 @@ public class Parser {
 	public Instruction parseLine(String s) {
 
 		String[] parameters = s.split(", ");
-		System.out.println(parameters[1]);
 		String op = parameters[0].split(" ")[0];
 		InstructionType instructionType = null;
 		String rd = parameters[0].split(" ")[1];
