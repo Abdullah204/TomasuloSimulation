@@ -4,6 +4,14 @@ public class StoreBuffer {
 	int A;
 	double v;
 	ReservationID Q;
+	int index;
+	
+	public StoreBuffer() {
+	}
+	
+	public StoreBuffer(int A) {
+		this.A = A;
+	}
 
 	public boolean isBusy() {
 		return busy;
@@ -22,19 +30,12 @@ public class StoreBuffer {
 	}
 	
 
-	public ReservationID getID() {
+	public ReservationID getQ() {
 		return Q;
 	}
 
 	public void setQ(ReservationID Q) {
 		this.Q = Q;
-	}
-
-	public StoreBuffer(int A) {
-		this.A = A;
-	}
-
-	public StoreBuffer() {
 	}
 
 	public int getA() {

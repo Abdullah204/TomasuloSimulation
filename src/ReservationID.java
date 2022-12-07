@@ -23,4 +23,11 @@ public class ReservationID {
 	public void setIndex(int index) {
 		this.index = index;
 	}
+	
+	public boolean equals(ReservationID res)
+	{
+		return res.stationType == this.stationType 
+		       &&
+		       res.index == this.index;
+	}
 }

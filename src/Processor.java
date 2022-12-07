@@ -19,16 +19,16 @@ public class Processor {
 		addStation = new ReservationStation(3, StationType.ADD, 3);
 		mulStation = new ReservationStation(2, StationType.MUL, 3);
 		// TODO Auto-generated constructor stub
-		sb = new StoreBuffers(3);
-		lb = new LoadBuffers(3);
+		sb = new StoreBuffers(3, 2); //We are assuming CACHE takes 2 cycles
+		lb = new LoadBuffers(3, 2);
 		rf = new RegisterFile();
 		memory = new Memory(2048);
 	}
 
 	public void next() {
+		checkExecution(); //end cycle --> start + latency 
 		if (tryIssue())
 			pc++;
-		checkExecution();
 		checkPublish();
 		checkBus();
 		printCycle();
@@ -37,15 +37,94 @@ public class Processor {
 	}
 
 	public void checkBus() {
-
+		//Check if any slot need any thing from the BUS
+		if(bus.sourceID == null)
+		{
+			return;
+		}
+		
+		ALUStationTakeBus(0);
+		ALUStationTakeBus(1);
+		StoreBufferTakeBus();	
+	}
+	
+	public void ALUStationTakeBus(int x)
+	{
+		ReservationStation curr = (x == 0)? addStation : mulStation;
+		for(Reservation res : curr.getStation())
+		{
+			if(res.getQj().equals(bus.sourceID))
+			{
+				//Now i had something i need from the bus at Qj for this reservation
+				res.setQj(null);
+				res.setVj(bus.value);
+			}
+			if(res.getQk().equals(bus.sourceID))
+			{
+				//Now i had something i need from the bus at Qk for this reservation
+				res.setQk(null);
+				res.setVk(bus.value);
+			}
+		}
+	}
+	
+	public void StoreBufferTakeBus()
+	{
+		for(StoreBuffer res : sb.getStation())
+		{
+			if(res.getQ().equals(bus.sourceID))
+			{
+				//Now i had something i need from the bus at Q for this storeBuffer
+				res.setQ(null);
+				res.setV(bus.value);
+			}
+		}
 	}
 
 	public void checkPublish() {
+		
 
 	}
 
 	public void checkExecution() {
+		//LOGIC loop over all stations if Vj and Vk available set sstartCycle with current Cycle
+		ALUCheckExecution(0);
+		ALUCheckExecution(1);
+		StoreBufferCheckExecution();
+		//LoadBufferCheckExecution(); //Redundant i think
+	}
 
+	public void StoreBufferCheckExecution() {
+		// TODO Auto-generated method stub
+		//LATENCY
+		for(StoreBuffer buff : sb.getStation())
+		{
+			if(buff.getQ() == null)
+			{
+				int instructionLocation = buff.index;
+				Instruction instruction = program.getInstructionQueue()[instructionLocation];
+				instruction.setStartExec(cycle + 1);
+				instruction.setEndExec(cycle + 1 + sb.latency);
+				//Start EXECUTING
+			}
+		}
+		
+	}
+
+	private void ALUCheckExecution(int i) {
+		// TODO Auto-generated method stub
+		ReservationStation curr = (i == 0)? addStation : mulStation;
+		for(Reservation res : curr.getStation())
+		{
+			if(res.getQj() == null && res.getQk() == null)
+			{
+				//I don;t have neither both so all is OK with my inputs
+				//start EXEC
+				Instruction instruction = program.getInstructionQueue()[res.index];
+				instruction.setStartExec(cycle + 1);
+				instruction.setEndExec(cycle + 1 + curr.latency);
+			}
+		}
 	}
 
 	public void printCycle() {
@@ -53,6 +132,10 @@ public class Processor {
 	}
 
 	public boolean tryIssue() {
+		if(pc >= program.getInstructionQueue().length) //No More to issue in the stations 
+		{
+			return false;
+		}
 		Instruction current = program.getInstructionQueue()[pc];
 		if (current.instructionType == InstructionType.ADD || current.instructionType == InstructionType.SUB) {
 			Op op = current.instructionType == InstructionType.ADD ? Op.ADD : Op.SUB;
@@ -203,6 +286,8 @@ public class Processor {
 		int A = rf.getValueInteger(rs) + instruction.offset;
 		buffer.setA(A);
 		rf.setQiInteger(getRegisterIndex(instruction.rd), buffer.ID);
+		instruction.setStartExec(cycle + 1);
+		instruction.setEndExec(cycle + 1 + lb.latency);
 	}
 
 }
