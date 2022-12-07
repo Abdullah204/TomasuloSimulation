@@ -36,6 +36,7 @@ public class Processor {
 		return;
 	}
 
+	// checks if any reservation needs data on bus and assign it
 	public void checkBus() {
 		//Check if any slot need any thing from the BUS
 		if(bus.sourceID == null)
@@ -81,6 +82,7 @@ public class Processor {
 		}
 	}
 
+	// checks if any instruction finished execution and publishes result on bus
 	public void checkPublish() {
 		
 
