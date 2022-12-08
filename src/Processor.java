@@ -12,11 +12,15 @@ public class Processor {
 	RegisterFile rf;
 	Bus bus;
 	Memory memory;
+	String issueSummary = "issue: \n";
+	String executeSummary = "execute: \n";
+	String publishSummary = "publish: \n";
+	String busSummary = "bus: \n";
 
 	public Processor(Program program) {
 		this.program = program;
 		bus = new Bus();
-		cycle = 0;
+		cycle = 1;
 		pc = 0;
 		addStation = new ReservationStation(3, StationType.ADD, 3);
 		mulStation = new ReservationStation(2, StationType.MUL, 3);
@@ -155,7 +159,7 @@ public class Processor {
 			}
 			else {
 				
-				int cnt = (countDependencies(((LoadBuffer)x).getID()));
+				int cnt = (countDependencies(((LoadBuffer)x).getQ()));
 				InstructionType needToBeAdded = program.getInstructionQueue()[pc].getInstructionType();
 				if(needToBeAdded == InstructionType.LOAD)
 				{
@@ -338,7 +342,49 @@ public class Processor {
 	}
 
 	public void printCycle() {
+		System.out.println("cycle number " + cycle +": ");
+		System.out.println(issueSummary);
+		System.out.println(executeSummary);
+		System.out.println(publishSummary);
+		System.out.println(busSummary);
+		printStation(addStation);
+		printStation(mulStation);
+		printLoadBuffers();
+		printStoreBuffers();
+		printRegisterFile();
 
+	}
+
+	public void printRegisterFile() {
+		System.out.println("Floating Register File: ");
+		for(int i = 0 ; i < 32 ; i++)
+			System.out.println(rf.getFloating()[i]);
+		System.out.println("Integer Register File: ");
+		for(int i = 0 ; i < 32 ; i++)
+			System.out.println(rf.getInteger()[i]);
+		
+	}
+
+	public void printStoreBuffers() {
+		System.out.println("Store Buffers: ");
+		for(int i = 0 ; i < sb.getStation().length ; i++)
+			System.out.println(sb.getStation()[i]);
+		
+	}
+
+	public void printLoadBuffers() {
+		System.out.println("Load Buffers: ");
+
+		for(int i = 0 ; i < lb.getStation().length ; i++)
+			System.out.println(lb.getStation()[i]);
+	}
+
+	public void printStation(ReservationStation station) {
+		System.out.println(station.type.toString() + " station: ");
+		for(Reservation res : station.getStation()) {
+			System.out.println(res.toString());
+		}
+		
 	}
 
 	public boolean tryIssue() {
@@ -497,9 +543,12 @@ public class Processor {
 
 		int A = rf.getValueInteger(rs) + instruction.offset;
 		buffer.setA(A);
-		rf.setQiInteger(getRegisterIndex(instruction.rd), buffer.ID);
+		rf.setQiInteger(getRegisterIndex(instruction.rd), buffer.Q);
 		instruction.setStartExec(cycle + 1);
 		instruction.setEndExec(cycle + 1 + lb.latency);
 	}
+	
+	
+	
 
 }

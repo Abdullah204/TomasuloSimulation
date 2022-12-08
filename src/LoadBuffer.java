@@ -1,6 +1,6 @@
 
 public class LoadBuffer {
-	ReservationID ID;
+	ReservationID Q;
 	int A;
 	boolean busy;
 	int index;
@@ -14,24 +14,24 @@ public class LoadBuffer {
 	}
 
 
-	public LoadBuffer(ReservationID ID, int A) {
-		this.ID = ID;
+	public LoadBuffer(ReservationID Q, int A) {
+		this.Q = Q;
 		this.A = A;
 	}
 	
 	
-	public LoadBuffer(ReservationID ID) {
-		this.ID = ID;
+	public LoadBuffer(ReservationID Q) {
+		this.Q = Q;
 	}
 
 
-	public ReservationID getID() {
-		return ID;
+	public ReservationID getQ() {
+		return Q;
 	}
 
 
-	public void setID(ReservationID ID) {
-		this.ID = ID;
+	public void setID(ReservationID Q) {
+		this.Q = Q;
 	}
 
 
@@ -42,6 +42,10 @@ public class LoadBuffer {
 
 	public void setA(int A) {
 		this.A = A;
+	}
+	
+	public String toString() {
+		return "Q: "+ Q.toString() + " busy: " + busy + " A: " +A;
 	}
 
 }

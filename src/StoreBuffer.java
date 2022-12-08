@@ -45,5 +45,9 @@ public class StoreBuffer {
 	public void setA(int A) {
 		this.A = A;
 	}
+	
+	public String toString() {
+		return "Q: "+ Q.toString() + " busy: " + busy + " A: " +A+ " v: " + v;
+	}
 
 }

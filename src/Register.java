@@ -7,4 +7,8 @@ public class Register {
 		this.value = value;
 		this.Qi = Qi;
 	}
+	
+	public String toString() {
+		return "Qi: " + Qi + " value: " + value;
+	}
 }

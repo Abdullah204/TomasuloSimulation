@@ -30,4 +30,8 @@ public class ReservationID {
 		       &&
 		       res.index == this.index;
 	}
+	
+	public String toString() {
+		return this.stationType.toString() + index;
+	}
 }
