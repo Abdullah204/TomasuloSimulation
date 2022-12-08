@@ -47,7 +47,7 @@ public class StoreBuffer {
 	}
 	
 	public String toString() {
-		return "Q: "+ Q.toString() + " busy: " + busy + " A: " +A+ " v: " + v;
+		return " busy: " + busy + " A: " +A+ " v: " + v;
 	}
 
 }

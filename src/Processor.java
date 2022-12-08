@@ -31,15 +31,50 @@ public class Processor {
 		memory = new Memory(2048);
 	}
 
-	public void next() {
+	public boolean next() {
+		if(pc>= program.getInstructionQueue().length && allStationsEmpty())
+			return false;
 		checkExecution(); //end cycle --> start + latency 
-		if (tryIssue())
-			pc++;
+		boolean issueSuccessful = tryIssue();
 		checkPublish();
 		checkBus();
 		printCycle();
+		if(issueSuccessful) pc++;
 		cycle++;
-		return;
+		return true;
+	}
+
+	public boolean allStationsEmpty() {
+		boolean ret = true;
+		ret &= reservationEmpty(addStation);
+		ret &= reservationEmpty(mulStation);
+		ret &= loadBuffersEmpty();
+		ret &= storeBuffersEmpty();
+		return ret;
+	}
+
+	public boolean storeBuffersEmpty() {
+		int c = 0;
+		for(StoreBuffer res : sb.getStation())
+			if(res.isBusy())
+				c++;
+		return c==0;
+	}
+
+	public boolean loadBuffersEmpty() {
+		int c = 0;
+		for(LoadBuffer res : lb.getStation())
+			if(res.isBusy())
+				c++;
+		return c==0;		
+	}
+
+	public boolean reservationEmpty(ReservationStation station) {
+		int c = 0;
+		for(Reservation res : station.getStation())
+			if(res.isBusy())
+				c++;
+		return c==0;
 	}
 
 	// checks if any reservation needs data on bus and assign it
@@ -169,12 +204,16 @@ public class Processor {
 			}
 
 		}
+		
+		if(dependencies.isEmpty())
+			return;
 		//Get Max from the count
 		Integer maxVal = Collections.max(dependencies);
 		Integer maxIdx = dependencies.indexOf(maxVal);
 		
 		
 		//Now iam Published
+		
 		publish(finishedSlots.get(maxIdx));
 	
 		//Old Comments if i missed something (Hussein Ebrahim)
@@ -277,21 +316,21 @@ public class Processor {
 		int ans = 0;
 		for(Reservation res : addStation.getStation())
 		{
-			if(res.getQj().equals(id) || res.getQk().equals(id))
+			if( (res.getQj()!=null && res.getQj().equals(id)) || (res.getQk()!=null && res.getQk().equals(id) ))
 			{
 				ans++; //RAW Dependency
 			}
 		}
 		for(Reservation res : mulStation.getStation())
 		{
-			if(res.getQj().equals(id) || res.getQk().equals(id))
+			if( (res.getQj()!=null && res.getQj().equals(id)) || (res.getQk()!=null && res.getQk().equals(id) ))
 			{
 				ans++; //RAW Dependency
 			}
 		}
 		for(StoreBuffer res : sb.getStation())
 		{
-			if(res.getQ().equals(id))
+			if(res.getQ() != null && res.getQ().equals(id))
 			{
 				ans++; //RAW Dependency
 			}
@@ -325,7 +364,7 @@ public class Processor {
 		
 	}
 
-	private void ALUCheckExecution(int i) {
+	public void ALUCheckExecution(int i) {
 		// TODO Auto-generated method stub
 		ReservationStation curr = (i == 0)? addStation : mulStation;
 		for(Reservation res : curr.getStation())
@@ -430,7 +469,7 @@ public class Processor {
 		return false;
 	}
 
-	private void prepareInstructionArithmetic(Instruction instruction, Reservation res) {
+	public void prepareInstructionArithmetic(Instruction instruction, Reservation res) {
 		res.index = pc;
 		String rs = instruction.getRs();
 		if (rs.charAt(0) == 'F') {
