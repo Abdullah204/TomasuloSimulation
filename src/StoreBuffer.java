@@ -11,6 +11,7 @@ public class StoreBuffer {
 	
 	public StoreBuffer(int A) {
 		this.A = A;
+		index = -1;
 	}
 
 	public boolean isBusy() {

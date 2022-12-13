@@ -95,13 +95,13 @@ public class Processor {
 		ReservationStation curr = (x == 0)? addStation : mulStation;
 		for(Reservation res : curr.getStation())
 		{
-			if(res.getQj().equals(bus.sourceID))
+			if(res.getQj()!=null&&res.getQj().equals(bus.sourceID))
 			{
 				//Now i had something i need from the bus at Qj for this reservation
 				res.setQj(null);
 				res.setVj(bus.value);
 			}
-			if(res.getQk().equals(bus.sourceID))
+			if(res.getQk()!=null && res.getQk().equals(bus.sourceID))
 			{
 				//Now i had something i need from the bus at Qk for this reservation
 				res.setQk(null);
@@ -114,7 +114,7 @@ public class Processor {
 	{
 		for(StoreBuffer res : sb.getStation())
 		{
-			if(res.getQ().equals(bus.sourceID))
+			if(res.getQ()!=null && res.getQ().equals(bus.sourceID))
 			{
 				//Now i had something i need from the bus at Q for this storeBuffer
 				res.setQ(null);
@@ -125,12 +125,14 @@ public class Processor {
 	
 	public void getFinished(ArrayList<Object>finishedSlots, int x) //Load Add Mul
 	{
-		ReservationStation curr = (x == 0)? addStation : (x == 1)? mulStation : null;
+		ReservationStation curr = (x == 0)? addStation : ((x == 1)? mulStation : null);
 		if(curr != null)
 		{
 			for(Reservation res : curr.getStation())
 			{
-				if(program.getInstructionQueue()[res.index].getEndExec() <= cycle)
+				int positionInProgram = res.index;
+				if(positionInProgram == -1) continue;
+				if(program.getInstructionQueue()[res.index].getEndExec() <= cycle && res.busy == true)
 				{
 					//This one can be considered as a finsihed instruction 
 					finishedSlots.add(res);
@@ -142,7 +144,12 @@ public class Processor {
 		{
 			for(LoadBuffer lodB : lb.getStation())
 			{
-				if(program.getInstructionQueue()[lodB.index].getEndExec() <= cycle)
+				//System.out.println(lodB.index + " " + program.getInstructionQueue()[lodB.index].getEndExec());
+				int positionInProgram = lodB.index;
+				
+				if(positionInProgram == -1) continue;
+				
+				if(program.getInstructionQueue()[lodB.index].getEndExec() <= cycle && lodB.busy == true)
 				{
 					finishedSlots.add(lodB);
 				}
@@ -213,7 +220,11 @@ public class Processor {
 		
 		
 		//Now iam Published
-		
+		//System.out.println(finishedSlots.get(maxIdx));
+		for(Object x : finishedSlots)
+		{
+			System.out.println(x);
+		}
 		publish(finishedSlots.get(maxIdx));
 	
 		//Old Comments if i missed something (Hussein Ebrahim)
@@ -243,7 +254,7 @@ public class Processor {
 		String rd = "";
 		ReservationID id = null;
 		double result = 0;
-		
+		System.out.println(slot);
 		switch(op)
 		{
 		case "LD" :
@@ -256,7 +267,7 @@ public class Processor {
 			
 			lb.size--; //Decrease Size of the LOAD BUFFERS as this one is saaying BYE BYE 
 			rd = program.getInstructionQueue()[((LoadBuffer)slot).index].getRd();
-			return ;
+			break ;
 		
 		case "ADD" :
 			addStation.size--;
@@ -264,36 +275,39 @@ public class Processor {
 			
 			result = ((Reservation)slot).getVj() + ((Reservation)slot).getVk();
 			rd = program.getInstructionQueue()[((Reservation)slot).index].getRd();
-			return ;
+			break ;
 		case "SUB":
 			addStation.size--;
 			result = ((Reservation)slot).getVj() - ((Reservation)slot).getVk();
 			rd = program.getInstructionQueue()[((Reservation)slot).index].getRd();
-			return ;
+			break ;
 		case "MUL":
 			mulStation.size--;
 			result = ((Reservation)slot).getVj() * ((Reservation)slot).getVk();
 			rd = program.getInstructionQueue()[((Reservation)slot).index].getRd();
-			return ;
+			break ;
 		case "DIV":
 			mulStation.size--;
 			result = ((Reservation)slot).getVj() / ((Reservation)slot).getVk();
 			rd = program.getInstructionQueue()[((Reservation)slot).index].getRd();
-			return ;
+			break ;
 		}
 		
 		//Make the slot busy back to false 
-		if(slot.getClass().getSimpleName().equals("Reservation")) 
+		if(slot.getClass().getSimpleName().equals("Reservation") == true) 
 		{
 			((Reservation)slot).setBusy(false);
+			id = ((Reservation)slot).ID;
 		}
-		else
+		else {
+			id = ((LoadBuffer)slot).Q;
 			((LoadBuffer)slot).setBusy(false);
-		
+		}
 		
 		//Now i have the operation Result and the RD of the slot that will be removed 
 		
 		//GET the registerIndex
+		//System.out.println(rd);
 		int targetIdx = getRegisterIndex(rd);
 		
 		//set the result value in the register file now (Trash because if the register need something else in Q overriden it will never be used but i will put it anyways)
@@ -352,7 +366,7 @@ public class Processor {
 		//LATENCY
 		for(StoreBuffer buff : sb.getStation())
 		{
-			if(buff.getQ() == null)
+			if(buff.getQ() == null && buff.busy == true)
 			{
 				int instructionLocation = buff.index;
 				Instruction instruction = program.getInstructionQueue()[instructionLocation];
@@ -369,7 +383,7 @@ public class Processor {
 		ReservationStation curr = (i == 0)? addStation : mulStation;
 		for(Reservation res : curr.getStation())
 		{
-			if(res.getQj() == null && res.getQk() == null)
+			if(res.getQj() == null && res.getQk() == null && res.busy == true)
 			{
 				//I don;t have neither both so all is OK with my inputs
 				//start EXEC
@@ -579,12 +593,13 @@ public class Processor {
 
 	public void prepareInstructionLoad(Instruction instruction, LoadBuffer buffer) {
 		int rs = getRegisterIndex(instruction.rs);
-
 		int A = rf.getValueInteger(rs) + instruction.offset;
 		buffer.setA(A);
-		rf.setQiInteger(getRegisterIndex(instruction.rd), buffer.Q);
+		rf.setQiFloating(getRegisterIndex(instruction.rd), buffer.Q);
 		instruction.setStartExec(cycle + 1);
 		instruction.setEndExec(cycle + 1 + lb.latency);
+		buffer.index = pc;
+		//Started Executing from the next Cycle iam in directly
 	}
 	
 	

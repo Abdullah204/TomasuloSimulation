@@ -19,11 +19,13 @@ public class Reservation {
 		this.Qj = qj;
 		this.Qk = qk;
 		this.A = a;
+		index = -1;
 	}
 	
 	public Reservation(ReservationID ID) {
 		this.busy = false;
 		this.ID = ID;
+		index = -1;
 	}
 
 	public ReservationID getID() {

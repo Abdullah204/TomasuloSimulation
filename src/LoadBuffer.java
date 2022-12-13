@@ -17,11 +17,13 @@ public class LoadBuffer {
 	public LoadBuffer(ReservationID Q, int A) {
 		this.Q = Q;
 		this.A = A;
+		index = -1;
 	}
 	
 	
 	public LoadBuffer(ReservationID Q) {
 		this.Q = Q;
+		index = -1;
 	}
 
 

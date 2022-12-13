@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Main {
 
@@ -10,14 +11,15 @@ public class Main {
 		Program program = p.parse(arr);
 		Processor processor = new Processor(program);
 		
+		Scanner sc = new Scanner(System.in);
+		//processor.checkPublish();
+		//processor.printCycle();
 		while(true) {
+			sc.next();
 			boolean still = processor.next();
 			if(!still)
 				break;
-		}
-		
-		
-		
+		}		
 		
 		
 	}
