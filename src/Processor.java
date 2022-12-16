@@ -167,19 +167,22 @@ public class Processor {
 				cnt = (countDependencies(((Reservation) x).getID()));
 				// my type is Reservation
 				Op operation = ((Reservation) x).getOp();
-				InstructionType needToBeAdded = program.getInstructionQueue()[pc].getInstructionType();
-				if (needToBeAdded == InstructionType.ADD || needToBeAdded == InstructionType.SUB) {
-					if (operation == Op.ADD || operation == Op.SUB) {
-						// We are on the same type
-						cnt += (addStation.size >= addStation.getStation().length) ? 1 : 0;
+				if(pc < program.getInstructionQueue().length) {
+					InstructionType needToBeAdded = program.getInstructionQueue()[pc].getInstructionType();
+					if (needToBeAdded == InstructionType.ADD || needToBeAdded == InstructionType.SUB) {
+						if (operation == Op.ADD || operation == Op.SUB) {
+							// We are on the same type
+							cnt += (addStation.size >= addStation.getStation().length) ? 1 : 0;
+						}
+					}
+					if (needToBeAdded == InstructionType.MUL || needToBeAdded == InstructionType.DIV) {
+						if (operation == Op.MUL || operation == Op.DIV) {
+							// We are on the same type
+							cnt += (mulStation.size >= mulStation.getStation().length) ? 1 : 0;
+						}
 					}
 				}
-				if (needToBeAdded == InstructionType.MUL || needToBeAdded == InstructionType.DIV) {
-					if (operation == Op.MUL || operation == Op.DIV) {
-						// We are on the same type
-						cnt += (mulStation.size >= mulStation.getStation().length) ? 1 : 0;
-					}
-				}
+				
 				dependencies.add(cnt);
 			} else {
 				int cnt = (countDependencies(((LoadBuffer) x).getQ()));
@@ -197,7 +200,7 @@ public class Processor {
 		}
 
 		if (dependencies.isEmpty()) {
-			System.out.println("no finished slots");
+//			System.out.println("no finished slots");
 			return;
 		}
 			
@@ -207,10 +210,10 @@ public class Processor {
 
 		// Now iam Published
 		// System.out.println(finishedSlots.get(maxIdx));
-		System.out.println("finished slots: \n");
-		for (Object x : finishedSlots) {
-			System.out.println(x);
-		}
+//		System.out.println("finished slots: \n");
+//		for (Object x : finishedSlots) {
+//			System.out.println(x);
+//		}
 		publish(finishedSlots.get(maxIdx));
 
 		// Old Comments if i missed something (Hussein Ebrahim)
@@ -334,19 +337,23 @@ public class Processor {
 		// current Cycle
 		ALUCheckExecution(0);
 		ALUCheckExecution(1);
-		StoreBufferCheckExecution();
+		storeBufferCheckExecution();
 		// LoadBufferCheckExecution(); //Redundant i think
 	}
 
-	public void StoreBufferCheckExecution() {
+	public void storeBufferCheckExecution() {
 		// TODO Auto-generated method stub
 		// LATENCY
 		for (StoreBuffer buff : sb.getStation()) {
 			if (buff.getQ() == null && buff.busy == true) {
 				int instructionLocation = buff.index;
 				Instruction instruction = program.getInstructionQueue()[instructionLocation];
-				instruction.setStartExec(cycle + 1);
-				instruction.setEndExec(cycle + 1 + sb.latency);
+				if(instruction.startExec == -1) {
+					System.out.println("da5alt");
+					instruction.setStartExec(cycle + 1);
+					instruction.setEndExec(cycle + 1 + sb.latency);
+				}
+				
 				// Start EXECUTING
 			}
 		}
@@ -361,8 +368,11 @@ public class Processor {
 				// I don;t have neither both so all is OK with my inputs
 				// start EXEC
 				Instruction instruction = program.getInstructionQueue()[res.index];
-				instruction.setStartExec(cycle + 1);
-				instruction.setEndExec(cycle + 1 + curr.latency);
+				if(instruction.startExec == -1) {
+					instruction.setStartExec(cycle + 1);
+					instruction.setEndExec(cycle + 1 + curr.latency);
+				}
+				
 			}
 		}
 	}
@@ -548,6 +558,8 @@ public class Processor {
 			}
 
 		}
+		buffer.index = pc;
+
 	}
 
 	public boolean issueLoadBuffer() {

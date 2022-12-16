@@ -20,6 +20,7 @@ public class Instruction {
 		this.rd = rd;
 		this.offset = offset;
 		endExec = Integer.MAX_VALUE;
+		startExec = -1;
 	}
 
 	public InstructionType getInstructionType() {

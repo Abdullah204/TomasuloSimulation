@@ -48,7 +48,11 @@ public class StoreBuffer {
 	}
 	
 	public String toString() {
-		return " busy: " + busy + " A: " +A+ " v: " + v;
+		return " busy: " + busy +
+				" A: " +A+ 
+				" v: " + v+
+				" Q: " + (Q==null? "null":Q.toString()) +
+				" index: "+ index;
 	}
 
 }
