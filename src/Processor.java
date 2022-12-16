@@ -151,6 +151,7 @@ public class Processor {
 		// If any instruction in any station has endExec == currCycle:
 		// for each instruction loop over all other instructions(stations count
 		// dependencies (store + add + mul) then get Max)
+		checkFinishedStores();
 		ArrayList<Object> finishedSlots = new ArrayList<Object>();
 		for (int i = 0; i < 3; ++i) {
 			getFinished(finishedSlots, i);// return arrayList of reservations
@@ -221,6 +222,13 @@ public class Processor {
 		//////////// GET the Value
 		// bus.value = result;
 
+	}
+
+	public void checkFinishedStores() {
+		// TODO Auto-generated method stub
+		for(StoreBuffer b : sb.getStation())
+			if(program.getInstructionQueue()[b.index].endExec == cycle)
+				b.setBusy(false);
 	}
 
 	public void publish(Object x) {
