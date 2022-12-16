@@ -63,7 +63,13 @@ public class Instruction {
 	}
 
 	public String toString() {
-		return "type: " + instructionType + " rs: " + rs + " rt: " + rt + " rd: " + rd + " offset: " + offset;
+		return "type: " + instructionType +
+				" rs: " + rs + 
+				" rt: " + rt + 
+				" rd: " + rd + 
+				" offset: " + offset + 
+				" startExec: " + startExec+ 
+				" endExec: " + endExec;
 	}
 	
 	public int getStartExec() {
