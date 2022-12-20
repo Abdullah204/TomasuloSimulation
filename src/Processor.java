@@ -396,7 +396,7 @@ public class Processor {
 		printLoadBuffers();
 		printStoreBuffers();
 		printProgram();
-//		printRegisterFile();
+		printRegisterFile();
 
 	}
 
@@ -408,10 +408,10 @@ public class Processor {
 	public void printRegisterFile() {
 		System.out.println("Floating Register File: ");
 		for (int i = 0; i < 32; i++)
-			System.out.println(rf.getFloating()[i]);
+			System.out.println("F"+i+" " + rf.getFloating()[i]);
 		System.out.println("Integer Register File: ");
 		for (int i = 0; i < 32; i++)
-			System.out.println(rf.getInteger()[i]);
+			System.out.println("R"+i+" " + rf.getInteger()[i]);
 
 	}
 

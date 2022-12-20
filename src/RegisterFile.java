@@ -7,7 +7,7 @@ public class RegisterFile {
 		floating = new Register[32];
 		integer = new Register[32];
 		for(int i = 0 ; i <32 ; i++) {
-			floating[i] = new Register(0,null);
+			floating[i] = new Register(i,null);
 			integer[i] = new Register(0,null);
 			
 		}
