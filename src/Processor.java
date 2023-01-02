@@ -38,7 +38,7 @@ public class Processor {
 		boolean issueSuccessful = tryIssue();
 		checkPublish();
 		checkBus();
-		printCycle();
+		System.out.println(printCycle());
 		if (issueSuccessful)
 			pc++;
 		cycle++;
@@ -168,7 +168,7 @@ public class Processor {
 				cnt = (countDependencies(((Reservation) x).getID()));
 				// my type is Reservation
 				Op operation = ((Reservation) x).getOp();
-				if(pc < program.getInstructionQueue().length) {
+				if (pc < program.getInstructionQueue().length) {
 					InstructionType needToBeAdded = program.getInstructionQueue()[pc].getInstructionType();
 					if (needToBeAdded == InstructionType.ADD || needToBeAdded == InstructionType.SUB) {
 						if (operation == Op.ADD || operation == Op.SUB) {
@@ -183,7 +183,7 @@ public class Processor {
 						}
 					}
 				}
-				
+
 				dependencies.add(cnt);
 			} else {
 				int cnt = (countDependencies(((LoadBuffer) x).getQ()));
@@ -192,7 +192,7 @@ public class Processor {
 					if (needToBeAdded == InstructionType.LOAD) {
 						cnt += (lb.size >= lb.getStation().length) ? 1 : 0;
 					}
-					
+
 				}
 				dependencies.add(cnt);
 
@@ -204,7 +204,7 @@ public class Processor {
 //			System.out.println("no finished slots");
 			return;
 		}
-			
+
 		// Get Max from the count
 		Integer maxVal = Collections.max(dependencies);
 		Integer maxIdx = dependencies.indexOf(maxVal);
@@ -226,8 +226,8 @@ public class Processor {
 
 	public void checkFinishedStores() {
 		// TODO Auto-generated method stub
-		for(StoreBuffer b : sb.getStation())
-			if(program.getInstructionQueue()[b.index].endExec == cycle)
+		for (StoreBuffer b : sb.getStation())
+			if (program.getInstructionQueue()[b.index].endExec == cycle)
 				b.setBusy(false);
 	}
 
@@ -356,12 +356,12 @@ public class Processor {
 			if (buff.getQ() == null && buff.busy == true) {
 				int instructionLocation = buff.index;
 				Instruction instruction = program.getInstructionQueue()[instructionLocation];
-				if(instruction.startExec == -1) {
+				if (instruction.startExec == -1) {
 					System.out.println("da5alt");
 					instruction.setStartExec(cycle );
 					instruction.setEndExec(cycle  + sb.latency);
 				}
-				
+
 				// Start EXECUTING
 			}
 		}
@@ -379,87 +379,116 @@ public class Processor {
 				if(instruction.startExec == -1) {
 					instruction.setStartExec(cycle);
 					instruction.setEndExec(cycle + curr.latency);
+
 				}
-				
+
 			}
 		}
 	}
+	public String executeSummary() {
+		String res = "";
+		for(int i = 0 ; i< program.getInstructionQueue().length ; i++) {
+			Instruction inst = program.getInstructionQueue()[i];
+			if(inst.getStartExec() == cycle) {
+				res+="instruction " + inst.toString() + "started executing";
+			}
+			if(inst.getEndExec() == cycle) {
+				res+="instruction " + inst.toString() + "finished executing";
+			}
+		}
+		return res;
+		
+	}
 
-	public void printCycle() {
-		System.out.println("cycle number " + cycle + ": ");
-		System.out.println(issueSummary);
-		System.out.println(executeSummary);
-		System.out.println(publishSummary);
-		System.out.println(busSummary);
-		printStation(addStation);
-		printStation(mulStation);
-		printLoadBuffers();
-		printStoreBuffers();
-		printProgram();
-		printRegisterFile();
+	public String printCycle() {
+		String res = "";
+		res += "cycle number " + cycle + ": ";
+		res += issueSummary;
+		res += executeSummary();
+		res += publishSummary;
+		res += busSummary;
+		res += printStation(addStation);
+		res += printStation(mulStation);
+		res += printLoadBuffers();
+		res += printStoreBuffers();
+		res += printProgram();
+		res += printRegisterFile();
+		return res;
 
 	}
 
-	public void printProgram() {
+	public String printProgram() {
 		// TODO Auto-generated method stub
-		System.out.println("program: \n" + program.toString());
+		return "program: \n" + program.toString();
 	}
 
-	public void printRegisterFile() {
-		System.out.println("Floating Register File: ");
-		for (int i = 0; i < 32; i++)
-			System.out.println("F"+i+" " + rf.getFloating()[i]);
-		System.out.println("Integer Register File: ");
-		for (int i = 0; i < 32; i++)
-			System.out.println("R"+i+" " + rf.getInteger()[i]);
+	public String printRegisterFile() {
+		String ret = "Floating Register File: \n";
 
+		for (int i = 0; i < 32; i++)
+			ret += "F" + i + " " + rf.getFloating()[i];
+		System.out.println("Integer Register File: \n");
+		for (int i = 0; i < 32; i++)
+			ret += "R" + i + " " + rf.getInteger()[i];
+		return ret;
 	}
 
-	public void printStoreBuffers() {
-		System.out.println("Store Buffers: ");
+	public String printStoreBuffers() {
+		String ret = "";
+		ret += "Store Buffers: \n";
 		for (int i = 0; i < sb.getStation().length; i++)
-			System.out.println(sb.getStation()[i]);
-
+			ret += sb.getStation()[i];
+		return ret;
 	}
 
-	public void printLoadBuffers() {
-		System.out.println("Load Buffers: ");
+	public String printLoadBuffers() {
+		String ret = "";
+		ret += "Load Buffers: \n";
 
 		for (int i = 0; i < lb.getStation().length; i++)
-			System.out.println(lb.getStation()[i]);
+			ret += lb.getStation()[i];
+		return ret;
 	}
 
-	public void printStation(ReservationStation station) {
-		System.out.println(station.type.toString() + " station: ");
+	public String printStation(ReservationStation station) {
+		String ret = "";
+		ret += station.type.toString() + " station: \n";
 		for (Reservation res : station.getStation()) {
-			System.out.println(res.toString());
+			ret += res.toString();
 		}
+		return ret + "\n";
 
 	}
 
 	public boolean tryIssue() {
 		if (pc >= program.getInstructionQueue().length) // No More to issue in the stations
 		{
+			issueSummary += "no more issues remaining\n";
 			return false;
 		}
 		Instruction current = program.getInstructionQueue()[pc];
+		boolean yes;
 		if (current.instructionType == InstructionType.ADD || current.instructionType == InstructionType.SUB) {
 			Op op = current.instructionType == InstructionType.ADD ? Op.ADD : Op.SUB;
-			return issueStation(addStation, op);
+			return yes = issueStation(addStation, op);
 
 		} else if (current.instructionType == InstructionType.DIV || current.instructionType == InstructionType.MUL) {
 			Op op = current.instructionType == InstructionType.DIV ? Op.DIV : Op.MUL;
-			return issueStation(mulStation, op);
+			return yes = issueStation(mulStation, op);
 
 		} else if (current.instructionType == InstructionType.LOAD) {
-			return issueLoadBuffer();
+			return yes = issueLoadBuffer();
 
 		} else if (current.instructionType == InstructionType.STORE) {
-			return issueStoreBuffer();
+			return yes = issueStoreBuffer();
 		} else {
+			yes = false;
 			System.out.println("bug");
 		}
-
+		if(yes)
+			issueSummary += "instruction" + current + "is issued\n";
+		else
+			issueSummary += "instruction" + current + "can not be issued\n";
 		return false;
 	}
 
