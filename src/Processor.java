@@ -32,9 +32,15 @@ public class Processor {
 	}
 
 	public boolean next() {
+		
+		issueSummary = "issue: \n";
+		executeSummary = "execute: \n";
+		publishSummary = "publish: \n";
+		busSummary = "bus: \n";
+		
 		if (pc >= program.getInstructionQueue().length && allStationsEmpty())
 			return false;
-		checkExecution(); // end cycle --> start + latency
+		checkExecution(); // end cycle --> start + latency 
 		boolean issueSuccessful = tryIssue();
 		checkPublish();
 		checkBus();
@@ -202,6 +208,7 @@ public class Processor {
 
 		if (dependencies.isEmpty()) {
 //			System.out.println("no finished slots");
+			publishSummary += " No Instructions are publishing on the bus\n";
 			return;
 		}
 
@@ -215,6 +222,7 @@ public class Processor {
 //		for (Object x : finishedSlots) {
 //			System.out.println(x);
 //		}
+		
 		publish(finishedSlots.get(maxIdx));
 
 		// Old Comments if i missed something (Hussein Ebrahim)
@@ -470,26 +478,27 @@ public class Processor {
 		boolean yes;
 		if (current.instructionType == InstructionType.ADD || current.instructionType == InstructionType.SUB) {
 			Op op = current.instructionType == InstructionType.ADD ? Op.ADD : Op.SUB;
-			return yes = issueStation(addStation, op);
+			yes = issueStation(addStation, op);
 
 		} else if (current.instructionType == InstructionType.DIV || current.instructionType == InstructionType.MUL) {
 			Op op = current.instructionType == InstructionType.DIV ? Op.DIV : Op.MUL;
-			return yes = issueStation(mulStation, op);
+			yes = issueStation(mulStation, op);
 
 		} else if (current.instructionType == InstructionType.LOAD) {
-			return yes = issueLoadBuffer();
+			yes = issueLoadBuffer();
 
 		} else if (current.instructionType == InstructionType.STORE) {
-			return yes = issueStoreBuffer();
+			yes = issueStoreBuffer();
 		} else {
 			yes = false;
 			System.out.println("bug");
 		}
 		if(yes)
-			issueSummary += "instruction" + current + "is issued\n";
+			issueSummary += " instruction " + current + " is issued\n";
 		else
-			issueSummary += "instruction" + current + "can not be issued\n";
-		return false;
+			issueSummary += " instruction " + current + " can not be issued\n";
+		
+		return yes;
 	}
 
 	public boolean issueStation(ReservationStation station, Op op) {
