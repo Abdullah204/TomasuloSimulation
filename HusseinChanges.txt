@@ -1,0 +1,3 @@
+--> Change 1 : A change in the checkExecution the function that checks what are the instructions that are able to execute
+   since we execute it the first one in the cycle flow in our code hence once an instruction is ready then it should start in the same exact current cycle in that case
+   no need to wait because it is before issuing and taking from the bus in our code flow

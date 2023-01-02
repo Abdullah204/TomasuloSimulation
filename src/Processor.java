@@ -358,8 +358,8 @@ public class Processor {
 				Instruction instruction = program.getInstructionQueue()[instructionLocation];
 				if(instruction.startExec == -1) {
 					System.out.println("da5alt");
-					instruction.setStartExec(cycle + 1);
-					instruction.setEndExec(cycle + 1 + sb.latency);
+					instruction.setStartExec(cycle );
+					instruction.setEndExec(cycle  + sb.latency);
 				}
 				
 				// Start EXECUTING
@@ -377,8 +377,8 @@ public class Processor {
 				// start EXEC
 				Instruction instruction = program.getInstructionQueue()[res.index];
 				if(instruction.startExec == -1) {
-					instruction.setStartExec(cycle + 1);
-					instruction.setEndExec(cycle + 1 + curr.latency);
+					instruction.setStartExec(cycle);
+					instruction.setEndExec(cycle + curr.latency);
 				}
 				
 			}
