@@ -1,4 +1,5 @@
 package Tomasulo;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -31,24 +32,23 @@ public class Processor {
 		rf = new RegisterFile();
 		memory = new Memory(2048);
 	}
-	
-	
+
 	public void resetBus() {
-		 bus.sourceID = null;
+		bus.sourceID = null;
 	}
 
 	public boolean next() {
-		
+
 		issueSummary = "issue: \n";
 		executeSummary = "execute: \n";
 		publishSummary = "publish: \n";
 		busSummary = "bus: \n";
-		
+
 		resetBus();
-		
+
 		if (pc >= program.getInstructionQueue().length && allStationsEmpty())
 			return false;
-		checkExecution(); // end cycle --> start + latency 
+		checkExecution(); // end cycle --> start + latency
 		boolean issueSuccessful = tryIssue();
 		checkPublish();
 		checkBus();
@@ -230,7 +230,7 @@ public class Processor {
 //		for (Object x : finishedSlots) {
 //			System.out.println(x);
 //		}
-		
+
 		publish(finishedSlots.get(maxIdx));
 
 		// Old Comments if i missed something (Hussein Ebrahim)
@@ -330,9 +330,9 @@ public class Processor {
 		// FINALLYY PUT ON THE BUS THE VALUE OF RESULT + ID OF SLOT
 		bus.setValue(result);
 		bus.sourceID = id;
-		
-		publishSummary += " instruction " +  program.getInstructionQueue()[((Reservation) slot).index] + " started publishing on the bus\n";
-		
+
+		publishSummary += " instruction " + program.getInstructionQueue()[((Reservation) slot).index]
+				+ " started publishing on the bus\n";
 
 		return;
 	}
@@ -422,20 +422,27 @@ public class Processor {
 
 	public String busSummary() {
 		String ret = "bus: ";
-		if(bus.sourceID == null)
+		if (bus.sourceID == null)
 			ret += "empty \n";
 		else
 			ret += bus.toString() + "\n";
 		return ret;
-		
+
 	}
-	public String printCycle() {
+
+	public String getCycleSummary() {
 		String res = "";
 		res += "cycle number " + cycle + ": ";
 		res += issueSummary;
 		res += executeSummary();
 		res += publishSummary;
 		res += busSummary();
+		return res;
+	}
+
+	public String printCycle() {
+		String res = "";
+		res += getCycleSummary();
 		res += printStation(addStation);
 		res += printStation(mulStation);
 		res += printLoadBuffers();
@@ -515,12 +522,12 @@ public class Processor {
 			System.out.println("bug");
 		}
 
-		if(yes)
+		if (yes)
 			issueSummary += " instruction " + current + " is issued\n";
 
 		else
 			issueSummary += " instruction " + current + " can not be issued\n";
-		
+
 		return yes;
 	}
 
