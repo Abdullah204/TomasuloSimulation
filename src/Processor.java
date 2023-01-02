@@ -30,6 +30,11 @@ public class Processor {
 		rf = new RegisterFile();
 		memory = new Memory(2048);
 	}
+	
+	
+	public void resetBus() {
+		 bus.sourceID = null;
+	}
 
 	public boolean next() {
 		
@@ -37,6 +42,8 @@ public class Processor {
 		executeSummary = "execute: \n";
 		publishSummary = "publish: \n";
 		busSummary = "bus: \n";
+		
+		resetBus();
 		
 		if (pc >= program.getInstructionQueue().length && allStationsEmpty())
 			return false;
@@ -322,6 +329,9 @@ public class Processor {
 		// FINALLYY PUT ON THE BUS THE VALUE OF RESULT + ID OF SLOT
 		bus.setValue(result);
 		bus.sourceID = id;
+		
+		publishSummary += " instruction " +  program.getInstructionQueue()[((Reservation) slot).index] + " started publishing on the bus\n";
+		
 
 		return;
 	}
@@ -366,8 +376,8 @@ public class Processor {
 				Instruction instruction = program.getInstructionQueue()[instructionLocation];
 				if (instruction.startExec == -1) {
 					System.out.println("da5alt");
-					instruction.setStartExec(cycle );
-					instruction.setEndExec(cycle  + sb.latency);
+					instruction.setStartExec(cycle);
+					instruction.setEndExec(cycle + sb.latency);
 				}
 
 				// Start EXECUTING
@@ -384,7 +394,7 @@ public class Processor {
 				// I don;t have neither both so all is OK with my inputs
 				// start EXEC
 				Instruction instruction = program.getInstructionQueue()[res.index];
-				if(instruction.startExec == -1) {
+				if (instruction.startExec == -1) {
 					instruction.setStartExec(cycle);
 					instruction.setEndExec(cycle + curr.latency);
 
@@ -393,28 +403,38 @@ public class Processor {
 			}
 		}
 	}
+
 	public String executeSummary() {
 		String res = "";
-		for(int i = 0 ; i< program.getInstructionQueue().length ; i++) {
+		for (int i = 0; i < program.getInstructionQueue().length; i++) {
 			Instruction inst = program.getInstructionQueue()[i];
-			if(inst.getStartExec() == cycle) {
-				res+="instruction " + inst.toString() + "started executing";
+			if (inst.getStartExec() == cycle) {
+				res += "instruction " + inst.toString() + "started executing";
 			}
-			if(inst.getEndExec() == cycle) {
-				res+="instruction " + inst.toString() + "finished executing";
+			if (inst.getEndExec() == cycle) {
+				res += "instruction " + inst.toString() + "finished executing";
 			}
 		}
 		return res;
-		
+
 	}
 
+	public String busSummary() {
+		String ret = "bus: ";
+		if(bus.sourceID == null)
+			ret += "empty \n";
+		else
+			ret += bus.toString() + "\n";
+		return ret;
+		
+	}
 	public String printCycle() {
 		String res = "";
 		res += "cycle number " + cycle + ": ";
 		res += issueSummary;
 		res += executeSummary();
 		res += publishSummary;
-		res += busSummary;
+		res += busSummary();
 		res += printStation(addStation);
 		res += printStation(mulStation);
 		res += printLoadBuffers();
@@ -493,8 +513,10 @@ public class Processor {
 			yes = false;
 			System.out.println("bug");
 		}
+
 		if(yes)
 			issueSummary += " instruction " + current + " is issued\n";
+
 		else
 			issueSummary += " instruction " + current + " can not be issued\n";
 		

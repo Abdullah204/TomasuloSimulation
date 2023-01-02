@@ -36,6 +36,6 @@ public class ReservationStation {
 		for (int i = 0; i < station.length; i++) {
 			s+= station[i].toString() + "\n";
 		}
-		return s;
+		return s+"\n";
 	}
 }
