@@ -20,6 +20,9 @@ public class Bus {
 	public void setValue(double value) {
 		this.value = value;
 	}
+	public String toString() {
+		return sourceID.toString() + " : "+ value + "\n"; 
+	}
 	
 
 }
