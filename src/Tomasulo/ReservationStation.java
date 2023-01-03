@@ -31,7 +31,6 @@ public class ReservationStation {
 	public void setType(StationType type) {
 		this.type = type;
 	}
-	
 	public String toString() {
 		String s = "";
 		for (int i = 0; i < station.length; i++) {

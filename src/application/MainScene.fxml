@@ -41,8 +41,8 @@
       <Label layoutX="789.0" layoutY="397.0" text="Op" />
       <Label layoutX="840.0" layoutY="397.0" text="Vj" />
       <Label layoutX="887.0" layoutY="397.0" text="Vk" />
-      <Label layoutX="979.0" layoutY="397.0" text="Qj" />
-      <Label layoutX="932.0" layoutY="397.0" text="Qk" />
+      <Label layoutX="979.0" layoutY="398.0" text="Qk" />
+      <Label layoutX="932.0" layoutY="397.0" text="Qj" />
       <Line endX="248.0" layoutX="761.0" layoutY="424.0" startX="-100.0" />
       <Line endX="-44.0" endY="113.0" layoutX="760.0" layoutY="444.0" startX="-44.0" startY="-52.0" />
       <Line endX="-44.0" endY="111.0" layoutX="815.0" layoutY="446.0" startX="-44.0" startY="-53.0" />
@@ -63,8 +63,8 @@
       <Label layoutX="787.0" layoutY="203.0" text="Op" />
       <Label layoutX="838.0" layoutY="203.0" text="Vj" />
       <Label layoutX="885.0" layoutY="203.0" text="Vk" />
-      <Label layoutX="977.0" layoutY="203.0" text="Qj" />
-      <Label layoutX="930.0" layoutY="203.0" text="Qk" />
+      <Label layoutX="977.0" layoutY="203.0" text="Qk" />
+      <Label layoutX="930.0" layoutY="203.0" text="Qj" />
       <Line endX="248.0" layoutX="759.0" layoutY="230.0" startX="-100.0" />
       <Line endX="-44.0" endY="68.0" layoutX="758.0" layoutY="249.0" startX="-44.0" startY="-52.0" />
       <Line endX="-44.0" endY="68.0" layoutX="813.0" layoutY="250.0" startX="-44.0" startY="-53.0" />
@@ -123,5 +123,56 @@
       <Label layoutX="1154.0" layoutY="58.0" text="F13" />
       <Label layoutX="1189.0" layoutY="58.0" text="F14" />
       <Label layoutX="1224.0" layoutY="58.0" text="F15" />
+      <Label fx:id="resAddID1" alignment="CENTER" layoutX="660.0" layoutY="426.0" prefHeight="40.0" prefWidth="57.0" />
+      <Label fx:id="resAddID2" alignment="CENTER" layoutX="660.0" layoutY="469.0" prefHeight="46.0" prefWidth="57.0" />
+      <Label fx:id="resAddID3" alignment="CENTER" layoutX="660.0" layoutY="514.0" prefHeight="46.0" prefWidth="57.0" />
+      <Label fx:id="resMulID1" alignment="CENTER" layoutX="658.0" layoutY="232.0" prefHeight="40.0" prefWidth="57.0" />
+      <Label fx:id="resMulID2" alignment="CENTER" layoutX="658.0" layoutY="276.0" prefHeight="40.0" prefWidth="57.0" />
+      <Label fx:id="resMulBusy1" alignment="CENTER" layoutX="713.0" layoutY="232.0" prefHeight="40.0" prefWidth="57.0" />
+      <Label fx:id="resMulBusy2" alignment="CENTER" layoutX="713.0" layoutY="276.0" prefHeight="40.0" prefWidth="57.0" />
+      <Label fx:id="resMulOp1" alignment="CENTER" layoutX="769.0" layoutY="231.0" prefHeight="40.0" prefWidth="51.0" />
+      <Label fx:id="resMulOp2" alignment="CENTER" layoutX="769.0" layoutY="275.0" prefHeight="40.0" prefWidth="51.0" />
+      <Label fx:id="resMulVj1" alignment="CENTER" layoutX="821.0" layoutY="231.0" prefHeight="40.0" prefWidth="44.0" />
+      <Label fx:id="resMulVj2" alignment="CENTER" layoutX="820.0" layoutY="271.0" prefHeight="46.0" prefWidth="44.0" />
+      <Label fx:id="resMulVk1" alignment="CENTER" layoutX="865.0" layoutY="232.0" prefHeight="40.0" prefWidth="51.0" />
+      <Label fx:id="resMulVk2" alignment="CENTER" layoutX="864.0" layoutY="273.0" prefHeight="46.0" prefWidth="51.0" />
+      <Label fx:id="resMulQj1" alignment="CENTER" layoutX="916.0" layoutY="232.0" prefHeight="40.0" prefWidth="44.0" />
+      <Label fx:id="resMulQk1" alignment="CENTER" layoutX="962.0" layoutY="231.0" prefHeight="40.0" prefWidth="44.0" />
+      <Label fx:id="resMulQk2" alignment="CENTER" layoutX="963.0" layoutY="276.0" prefHeight="40.0" prefWidth="44.0" />
+      <Label fx:id="resMulQj2" alignment="CENTER" layoutX="916.0" layoutY="276.0" prefHeight="40.0" prefWidth="44.0" />
+      <Label fx:id="resAddBusy1" alignment="CENTER" layoutX="715.0" layoutY="426.0" prefHeight="40.0" prefWidth="57.0" />
+      <Label fx:id="resAddBusy2" alignment="CENTER" layoutX="715.0" layoutY="471.0" prefHeight="40.0" prefWidth="57.0" />
+      <Label fx:id="resAddBusy3" alignment="CENTER" layoutX="715.0" layoutY="516.0" prefHeight="40.0" prefWidth="57.0" />
+      <Label fx:id="resAddOp1" alignment="CENTER" layoutX="772.0" layoutY="425.0" prefHeight="40.0" prefWidth="51.0" />
+      <Label fx:id="resAddOp2" alignment="CENTER" layoutX="772.0" layoutY="471.0" prefHeight="40.0" prefWidth="51.0" />
+      <Label fx:id="resAddOp3" alignment="CENTER" layoutX="770.0" layoutY="516.0" prefHeight="40.0" prefWidth="51.0" />
+      <Label fx:id="resAddVj1" alignment="CENTER" layoutX="823.0" layoutY="425.0" prefHeight="40.0" prefWidth="44.0" />
+      <Label fx:id="resAddVj2" alignment="CENTER" layoutX="823.0" layoutY="471.0" prefHeight="40.0" prefWidth="44.0" />
+      <Label fx:id="resAddVj3" alignment="CENTER" layoutX="824.0" layoutY="515.0" prefHeight="40.0" prefWidth="44.0" />
+      <Label fx:id="resAddVk1" alignment="CENTER" layoutX="866.0" layoutY="426.0" prefHeight="40.0" prefWidth="51.0" />
+      <Label fx:id="resAddVk2" alignment="CENTER" layoutX="866.0" layoutY="470.0" prefHeight="40.0" prefWidth="51.0" />
+      <Label fx:id="resAddVk3" alignment="CENTER" layoutX="867.0" layoutY="516.0" prefHeight="40.0" prefWidth="51.0" />
+      <Label fx:id="resAddQj1" alignment="CENTER" layoutX="918.0" layoutY="425.0" prefHeight="40.0" prefWidth="44.0" />
+      <Label fx:id="resAddQj2" alignment="CENTER" layoutX="918.0" layoutY="470.0" prefHeight="40.0" prefWidth="44.0" />
+      <Label fx:id="resAddQj3" alignment="CENTER" layoutX="917.0" layoutY="516.0" prefHeight="40.0" prefWidth="44.0" />
+      <Label fx:id="resAddQk1" alignment="CENTER" layoutX="965.0" layoutY="425.0" prefHeight="40.0" prefWidth="44.0" />
+      <Label fx:id="resAddQk2" alignment="CENTER" layoutX="965.0" layoutY="470.0" prefHeight="40.0" prefWidth="44.0" />
+      <Label fx:id="resAddQk3" alignment="CENTER" layoutX="965.0" layoutY="516.0" prefHeight="40.0" prefWidth="44.0" />
+      <Label fx:id="F0" alignment="CENTER" layoutX="694.0" layoutY="81.0" prefHeight="34.0" prefWidth="32.0" text="0" />
+      <Label fx:id="F1" alignment="CENTER" layoutX="728.0" layoutY="81.0" prefHeight="34.0" prefWidth="32.0" text="0" />
+      <Label fx:id="F2" alignment="CENTER" layoutX="762.0" layoutY="81.0" prefHeight="34.0" prefWidth="32.0" text="0" />
+      <Label fx:id="F3" alignment="CENTER" layoutX="797.0" layoutY="81.0" prefHeight="34.0" prefWidth="32.0" text="0" />
+      <Label fx:id="F4" alignment="CENTER" layoutX="832.0" layoutY="81.0" prefHeight="34.0" prefWidth="32.0" text="0" />
+      <Label fx:id="F5" alignment="CENTER" layoutX="867.0" layoutY="81.0" prefHeight="34.0" prefWidth="32.0" text="0" />
+      <Label fx:id="F6" alignment="CENTER" layoutX="901.0" layoutY="81.0" prefHeight="34.0" prefWidth="32.0" text="0" />
+      <Label fx:id="F7" alignment="CENTER" layoutX="937.0" layoutY="81.0" prefHeight="34.0" prefWidth="32.0" text="0" />
+      <Label fx:id="F8" alignment="CENTER" layoutX="972.0" layoutY="81.0" prefHeight="34.0" prefWidth="32.0" text="0" />
+      <Label fx:id="F9" alignment="CENTER" layoutX="1007.0" layoutY="81.0" prefHeight="34.0" prefWidth="32.0" text="0" />
+      <Label fx:id="F10" alignment="CENTER" layoutX="1042.0" layoutY="81.0" prefHeight="34.0" prefWidth="32.0" text="0" />
+      <Label fx:id="F11" alignment="CENTER" layoutX="1077.0" layoutY="81.0" prefHeight="34.0" prefWidth="32.0" text="0" />
+      <Label fx:id="F12" alignment="CENTER" layoutX="1112.0" layoutY="81.0" prefHeight="34.0" prefWidth="32.0" text="0" />
+      <Label fx:id="F13" alignment="CENTER" layoutX="1147.0" layoutY="81.0" prefHeight="34.0" prefWidth="32.0" text="0" />
+      <Label fx:id="F14" alignment="CENTER" layoutX="1182.0" layoutY="81.0" prefHeight="34.0" prefWidth="32.0" text="0" />
+      <Label fx:id="F15" alignment="CENTER" layoutX="1216.0" layoutY="82.0" prefHeight="34.0" prefWidth="38.0" text="0" />
    </children>
 </Pane>
