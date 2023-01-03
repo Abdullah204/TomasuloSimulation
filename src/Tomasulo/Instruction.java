@@ -8,7 +8,6 @@ public class Instruction {
 	int offset;
 	int startExec;
 	int endExec;
-	
 
 	public Instruction() {
 
@@ -23,6 +22,8 @@ public class Instruction {
 		endExec = Integer.MAX_VALUE;
 		startExec = -1;
 	}
+	
+	
 
 	public InstructionType getInstructionType() {
 		return instructionType;
