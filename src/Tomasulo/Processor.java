@@ -19,6 +19,13 @@ public class Processor {
 	String publishSummary = "publish: \n";
 	String busSummary = "bus: \n";
 
+	int addlat = 2;
+	int mullat = 2;
+	int sublat = 2;
+	int divlat = 2;
+	int ldlat = 2;
+	int stlat = 2;
+
 	public Processor(Program program) {
 		this.program = program;
 		bus = new Bus();
@@ -31,8 +38,8 @@ public class Processor {
 		rf = new RegisterFile();
 		memory = new Memory(2048);
 	}
-	
-	public Processor(Program program , int addsub , int muldiv , int ld , int str) {
+
+	public Processor(Program program, int addsub, int muldiv, int ld, int str) {
 		this.program = program;
 		bus = new Bus();
 		cycle = 1;
@@ -43,6 +50,26 @@ public class Processor {
 		lb = new LoadBuffers(3, ld);
 		rf = new RegisterFile();
 		memory = new Memory(2048);
+	}
+
+	public Processor(Program program, int addlat, int mullat, int sublat, int divlat, int ldlat, int stlat) {
+		this.program = program;
+		bus = new Bus();
+		cycle = 1;
+		pc = 0;
+		addStation = new ReservationStation(3, StationType.ADD, addlat);
+		mulStation = new ReservationStation(2, StationType.MUL, mullat);
+		sb = new StoreBuffers(3, stlat); // We are assuming CACHE takes 2 cycles
+		lb = new LoadBuffers(3, ldlat);
+		rf = new RegisterFile();
+		memory = new Memory(2048);
+
+		this.addlat = addlat;
+		this.mullat = mullat;
+		this.sublat = sublat;
+		this.divlat = divlat;
+		this.ldlat = ldlat;
+		this.stlat = stlat;
 	}
 
 	public void resetBus() {
@@ -60,7 +87,7 @@ public class Processor {
 
 		if (pc >= program.getInstructionQueue().length && allStationsEmpty())
 			return false;
-		checkExecution(); 
+		checkExecution();
 		boolean issueSuccessful = tryIssue();
 		checkPublish();
 		checkBus();
@@ -240,13 +267,9 @@ public class Processor {
 
 		// Now iam Published
 
-
 		publish(finishedSlots.get(maxIdx));
-		
+
 		publishSummary += "Dependencies " + maxVal + "\n";
-		
-
-
 
 	}
 
@@ -340,15 +363,9 @@ public class Processor {
 		bus.setValue(result);
 		bus.sourceID = id;
 
-		
-		publishSummary += " instruction " +  ((slot.getClass().getSimpleName().equals("Reservation") == true)? 
-				program.getInstructionQueue()[((Reservation) slot).index]
-						:
-				program.getInstructionQueue()[((LoadBuffer) slot).index]
-		) + " started publishing on the bus ";
-		
-
-
+		publishSummary += " instruction " + ((slot.getClass().getSimpleName().equals("Reservation") == true)
+				? program.getInstructionQueue()[((Reservation) slot).index]
+				: program.getInstructionQueue()[((LoadBuffer) slot).index]) + " started publishing on the bus ";
 
 		return;
 	}
@@ -391,7 +408,7 @@ public class Processor {
 				Instruction instruction = program.getInstructionQueue()[instructionLocation];
 				if (instruction.startExec == -1) {
 					instruction.setStartExec(cycle);
-					instruction.setEndExec(cycle + sb.latency);
+					instruction.setEndExec(cycle + getLatency(instruction.instructionType));
 				}
 
 			}
@@ -408,7 +425,7 @@ public class Processor {
 				Instruction instruction = program.getInstructionQueue()[res.index];
 				if (instruction.startExec == -1) {
 					instruction.setStartExec(cycle);
-					instruction.setEndExec(cycle + curr.latency);
+					instruction.setEndExec(cycle + getLatency(instruction.instructionType));
 
 				}
 
@@ -427,7 +444,7 @@ public class Processor {
 				res += "\nthe following instruction finished executing\n" + inst.toString() + "\n";
 			}
 		}
-		return res+"\n";
+		return res + "\n";
 
 	}
 
@@ -472,7 +489,7 @@ public class Processor {
 		String ret = "Floating Register File: \n";
 
 		for (int i = 0; i < 32; i++)
-			ret += "F" + i + " " + rf.getFloating()[i] +"\n";
+			ret += "F" + i + " " + rf.getFloating()[i] + "\n";
 //		for (int i = 0; i < 32; i++)
 //			ret += "R" + i + " " + rf.getInteger()[i];
 		return ret;
@@ -482,7 +499,7 @@ public class Processor {
 		String ret = "";
 		ret += "Store Buffers: \n";
 		for (int i = 0; i < sb.getStation().length; i++)
-			ret += sb.getStation()[i]  + "\n";
+			ret += sb.getStation()[i] + "\n";
 		return ret;
 	}
 
@@ -491,7 +508,7 @@ public class Processor {
 		ret += "Load Buffers: \n";
 
 		for (int i = 0; i < lb.getStation().length; i++)
-			ret += lb.getStation()[i]+"\n";
+			ret += lb.getStation()[i] + "\n";
 		return ret;
 	}
 
@@ -499,7 +516,7 @@ public class Processor {
 		String ret = "";
 		ret += station.type.toString() + " station: \n";
 		for (Reservation res : station.getStation()) {
-			ret += res.toString() +"\n";
+			ret += res.toString() + "\n";
 		}
 		return ret + "\n";
 
@@ -666,34 +683,47 @@ public class Processor {
 		buffer.setA(A);
 		rf.setQiFloating(getRegisterIndex(instruction.rd), buffer.Q);
 		instruction.setStartExec(cycle + 1);
-		instruction.setEndExec(cycle + 1 + lb.latency);
+		instruction.setEndExec(cycle + 1 + getLatency(instruction.instructionType));
 		buffer.index = pc;
 		// Started Executing from the next Cycle iam in directly
 	}
-	
-	public ReservationStation getAddStation()
-	{
+
+	public ReservationStation getAddStation() {
 		return addStation;
 	}
-	
-	public ReservationStation getMulStation()
-	{
+
+	public ReservationStation getMulStation() {
 		return mulStation;
 	}
-	
-	public LoadBuffers getLoadStation()
-	{
+
+	public LoadBuffers getLoadStation() {
 		return lb;
 	}
-	
-	public StoreBuffers getStoreStation()
-	{
+
+	public StoreBuffers getStoreStation() {
 		return sb;
 	}
-	
-	public RegisterFile getRegisterFile()
-	{
+
+	public RegisterFile getRegisterFile() {
 		return rf;
+	}
+
+	public int getLatency(InstructionType instructionType) {
+		// TODO Auto-generated method stub
+		if (instructionType == InstructionType.ADD)
+			return addlat;
+		if (instructionType == InstructionType.SUB)
+			return sublat;
+		if (instructionType == InstructionType.MUL)
+			return mullat;
+		if (instructionType == InstructionType.DIV)
+			return divlat;
+		if (instructionType == InstructionType.LOAD)
+			return ldlat;
+		if (instructionType == InstructionType.STORE)
+			return stlat;
+
+		return 0;
 	}
 
 }

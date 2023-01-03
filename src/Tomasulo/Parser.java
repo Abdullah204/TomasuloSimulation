@@ -1,10 +1,12 @@
 package Tomasulo;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Parser {
+	
 
 	public Parser() {
 		// TODO Auto-generated constructor stub
@@ -67,6 +69,8 @@ public class Parser {
 		return new Instruction(instructionType, rs, rt, rd, offset);
 
 	}
+
+	
 
 	public ArrayList<String> readProgram(File program) throws FileNotFoundException {
 
