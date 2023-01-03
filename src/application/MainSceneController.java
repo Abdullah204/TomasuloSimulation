@@ -15,6 +15,7 @@ import Tomasulo.StoreBuffer;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -27,22 +28,22 @@ public class MainSceneController {
 	static String filePath;
 	
 	 	@FXML
-	    private TextArea addLatency;
+	    private TextField addLatency;
 	 	
 	 	@FXML
-	    private TextArea subLatency;
+	    private TextField subLatency;
 	 	
 	 	@FXML
-	    private TextArea mulLatency;
+	    private TextField mulLatency;
 	 	
 	 	@FXML
-	    private TextArea divLatency;
+	    private TextField divLatency;
 	 	
 	 	@FXML
-	    private TextArea storeLatency;
+	    private TextField storeLatency;
 	 	
 	 	@FXML
-	    private TextArea loadLatency;
+	    private TextField loadLatency;
     
 	 	@FXML
 	    private TextArea summary;
