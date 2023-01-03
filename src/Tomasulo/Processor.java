@@ -331,8 +331,8 @@ public class Processor {
 		bus.setValue(result);
 		bus.sourceID = id;
 
-		publishSummary += " instruction " + program.getInstructionQueue()[((Reservation) slot).index]
-				+ " started publishing on the bus\n";
+		publishSummary += " instruction :\n" + program.getInstructionQueue()[((Reservation) slot).index]
+				+ "\nstarted publishing on the bus\n";
 
 		return;
 	}
@@ -406,17 +406,17 @@ public class Processor {
 	}
 
 	public String executeSummary() {
-		String res = "";
+		String res = "execute: \n";
 		for (int i = 0; i < program.getInstructionQueue().length; i++) {
 			Instruction inst = program.getInstructionQueue()[i];
 			if (inst.getStartExec() == cycle) {
-				res += "instruction " + inst.toString() + "started executing";
+				res += "\nthe following instruction started execution: \n" + inst.toString() + "\n";
 			}
 			if (inst.getEndExec() == cycle) {
-				res += "instruction " + inst.toString() + "finished executing";
+				res += "\nthe following instruction finished executing\n" + inst.toString() + "\n";
 			}
 		}
-		return res;
+		return res+"\n";
 
 	}
 
@@ -432,7 +432,7 @@ public class Processor {
 
 	public String getCycleSummary() {
 		String res = "";
-		res += "cycle number " + cycle + ": ";
+		res += "cycle number " + cycle + ": \n";
 		res += issueSummary;
 		res += executeSummary();
 		res += publishSummary;
@@ -462,10 +462,9 @@ public class Processor {
 		String ret = "Floating Register File: \n";
 
 		for (int i = 0; i < 32; i++)
-			ret += "F" + i + " " + rf.getFloating()[i];
-		System.out.println("Integer Register File: \n");
-		for (int i = 0; i < 32; i++)
-			ret += "R" + i + " " + rf.getInteger()[i];
+			ret += "F" + i + " " + rf.getFloating()[i] +"\n";
+//		for (int i = 0; i < 32; i++)
+//			ret += "R" + i + " " + rf.getInteger()[i];
 		return ret;
 	}
 
@@ -473,7 +472,7 @@ public class Processor {
 		String ret = "";
 		ret += "Store Buffers: \n";
 		for (int i = 0; i < sb.getStation().length; i++)
-			ret += sb.getStation()[i];
+			ret += sb.getStation()[i]  + "\n";
 		return ret;
 	}
 
@@ -482,7 +481,7 @@ public class Processor {
 		ret += "Load Buffers: \n";
 
 		for (int i = 0; i < lb.getStation().length; i++)
-			ret += lb.getStation()[i];
+			ret += lb.getStation()[i]+"\n";
 		return ret;
 	}
 
@@ -490,7 +489,7 @@ public class Processor {
 		String ret = "";
 		ret += station.type.toString() + " station: \n";
 		for (Reservation res : station.getStation()) {
-			ret += res.toString();
+			ret += res.toString() +"\n";
 		}
 		return ret + "\n";
 
