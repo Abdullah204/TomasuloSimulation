@@ -9,6 +9,14 @@ public class Register {
 		this.Qi = Qi;
 	}
 	
+	public ReservationID getQ() {
+		return Qi;
+	}
+	
+	public double getValue() {
+		return value;
+	}
+	
 	public String toString() {
 		return "Qi: " + Qi + " value: " + value;
 	}
