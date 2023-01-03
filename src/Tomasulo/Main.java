@@ -17,8 +17,9 @@ public class Main {
 		//processor.printCycle();
 		while(true) {
 //			sc.next();
-			boolean still = processor.next();
-			if(!still)
+			boolean still1 = processor.next1();
+			boolean still2 = processor.next2(still1);
+			if(!still1)
 				break;
 		}		
 		

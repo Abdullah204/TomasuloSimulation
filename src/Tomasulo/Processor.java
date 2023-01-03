@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Processor {
-	Program program;
+	public Program program;
 	int cycle;
-	int pc;
+	public int pc;
 	ReservationStation addStation;
 	ReservationStation mulStation;
 	LoadBuffers lb;
@@ -76,7 +76,7 @@ public class Processor {
 		bus.sourceID = null;
 	}
 
-	public boolean next() {
+	public boolean next1() {
 
 		issueSummary = "issue: \n";
 		executeSummary = "execute: \n";
@@ -92,6 +92,12 @@ public class Processor {
 		checkPublish();
 		checkBus();
 		System.out.println(printCycle());
+		return issueSuccessful;	
+	}
+	
+	public boolean next2(boolean issueSuccessful) {
+
+
 		if (issueSuccessful)
 			pc++;
 		cycle++;
@@ -460,7 +466,7 @@ public class Processor {
 
 	public String getCycleSummary() {
 		String res = "";
-		res += "cycle number " + (cycle - 1) + ": \n"; //To serve GUI shifting bug, was cycle only
+		res += "cycle number " + (cycle) + ": \n"; //To serve GUI shifting bug, was cycle only
 		res += issueSummary;
 		res += executeSummary();
 		res += publishSummary;

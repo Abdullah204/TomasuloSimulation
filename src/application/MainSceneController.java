@@ -13,6 +13,7 @@ import Tomasulo.Register;
 import Tomasulo.Reservation;
 import Tomasulo.StoreBuffer;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -29,6 +30,9 @@ public class MainSceneController {
 	
 	 	@FXML
 	    private TextField addLatency;
+	 	
+	 	@FXML
+	    private Button nextButton;
 	 	
 	 	@FXML
 	    private TextField subLatency;
@@ -602,8 +606,14 @@ public class MainSceneController {
 	    		resAddVk1.setText(addReservationStation[i].getVk() + "");
 	    		if(addReservationStation[i].getQj() != null)
 	    		resAddQj1.setText(addReservationStation[i].getQj().toString());
+	    		else {
+	    			resAddQj1.setText("");
+	    		}
 	    		if(addReservationStation[i].getQk() != null)
 	    		resAddQk1.setText(addReservationStation[i].getQk().toString());
+	    		else {
+	    			resAddQj1.setText("");
+	    		}
     		}
     		
     		if(i == 1) {
@@ -616,8 +626,14 @@ public class MainSceneController {
 	    		resAddVk2.setText(addReservationStation[i].getVk() + "");
 	    		if(addReservationStation[i].getQj() != null)
 	    		resAddQj2.setText(addReservationStation[i].getQj().toString());
+	    		else {
+	    			resAddQj2.setText("");
+	    		}
 	    		if(addReservationStation[i].getQk() != null)
 	    		resAddQk2.setText(addReservationStation[i].getQk().toString());
+	    		else {
+	    			resAddQk2.setText("");
+	    		}
     		}
     		
     		if(i == 2) {
@@ -630,6 +646,9 @@ public class MainSceneController {
 	    		resAddVk3.setText(addReservationStation[i].getVk() + "");
 	    		if(addReservationStation[i].getQj() != null)
 	    		resAddQj3.setText(addReservationStation[i].getQj().toString());
+	    		else {
+	    			resAddQj3.setText("");
+	    		}
 	    		if(addReservationStation[i].getQk() != null)
 	    		resAddQk3.setText(addReservationStation[i].getQk().toString());
     		}
@@ -647,8 +666,14 @@ public class MainSceneController {
 	    		resMulVk1.setText(mulReservationStation[i].getVk() + "");
 	            if(mulReservationStation[i].getQj() != null)
 	    		resMulQj1.setText(mulReservationStation[i].getQj().toString());
+	            else {
+	            	resMulQj1.setText("");
+	            }
 	            if(mulReservationStation[i].getQk() != null)
 	    		resMulQk1.setText(mulReservationStation[i].getQk().toString());
+	            else {
+	            	resMulQk1.setText("");
+	            }
     		}
     		
 	    		if(i == 1) {
@@ -661,8 +686,14 @@ public class MainSceneController {
 		    		resMulVk2.setText(mulReservationStation[i].getVk() + "");
 		            if(mulReservationStation[i].getQj() != null)
 		    		resMulQj2.setText(mulReservationStation[i].getQj().toString());
+		            else {
+		            	resMulQj2.setText("");
+		            }
 		            if(mulReservationStation[i].getQk() != null)
 		    		resMulQk2.setText(mulReservationStation[i].getQk().toString());
+		            else {
+		            	resMulQk2.setText("");
+		            }
     		}
     		
 		}
@@ -726,8 +757,13 @@ public class MainSceneController {
 
     @FXML
     void nextCycleClick(MouseEvent event) {
-    	processor.next();
+    	boolean issueSuccessful = processor.next1();
     	updateInfo();
+    	processor.next2(issueSuccessful);
+    	if (processor.pc >= processor.program.getInstructionQueue().length && processor.allStationsEmpty()) {
+    		nextButton.setDisable(true);
+    	}
+    		
     }
     
 
@@ -744,7 +780,7 @@ public class MainSceneController {
 		int ldLat = Integer.parseInt(loadLatency.getText());
 		int stLat = Integer.parseInt(storeLatency.getText());
 		processor = new Processor(program, addLat, mulLat, subLat, divLat, ldLat, stLat);
-    	updateInfo();
+		updateInfo();
     }
 
 }
