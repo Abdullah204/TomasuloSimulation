@@ -672,6 +672,9 @@ public class MainSceneController {
     		if(i == 0) {
 	    		if(loadBuffer[i].getQ() != null)
 	    		loadID1.setText(loadBuffer[i].getQ().toString());
+	    		else {
+	    			loadID1.setText(loadBuffer[i].getQ().toString());
+	    		}
 	    		loadBusy1.setText(loadBuffer[i].isBusy() + "");
     		}
     		
@@ -692,20 +695,29 @@ public class MainSceneController {
     	for (int i = 0; i < storeBuffer.length; i++) {
     		if(i == 0) {
 	    		if(storeBuffer[i].getQ() != null)
-	    		storeID1.setText(loadBuffer[i].getQ().toString());
-	    		storeBusy1.setText(loadBuffer[i].isBusy() + "");
+	    		storeQj1.setText(storeBuffer[i].getQ().toString());
+	    		else {
+	    			storeQj1.setText(storeBuffer[i].getV() + "");
+	    		}
+	    		storeBusy1.setText(storeBuffer[i].isBusy() + "");
     		}
     		
     		if(i == 1) {
-	    		if(loadBuffer[i].getQ() != null)
-	    		storeID2.setText(loadBuffer[i].getQ().toString());
-	    		storeBusy2.setText(loadBuffer[i].isBusy() + "");
+	    		if(storeBuffer[i].getQ() != null)
+		    		storeQj2.setText(storeBuffer[i].getQ().toString());
+	    		else {
+	    			storeQj2.setText(storeBuffer[i].getV() + "");
+	    		}
+	    		storeBusy2.setText(storeBuffer[i].isBusy() + "");
     		}
     		
     		if(i == 2) {
-	    		if(loadBuffer[i].getQ() != null)
-	    		storeID3.setText(loadBuffer[i].getQ().toString());
-	    		storeBusy3.setText(loadBuffer[i].isBusy() + "");
+	    		if(storeBuffer[i].getQ() != null)
+		    		storeQj3.setText(storeBuffer[i].getQ().toString());
+	    		else {
+	    			storeQj3.setText(storeBuffer[i].getV() + "");
+	    		}
+	    		storeBusy3.setText(storeBuffer[i].isBusy() + "");
     		}
     		
 		}
@@ -724,7 +736,14 @@ public class MainSceneController {
     	Parser p = new Parser();
 		ArrayList<String> arr = p.readProgram(new File(filePath));
 		Program program = p.parse(arr);
-		processor = new Processor(program);
+		
+		int addLat = Integer.parseInt(addLatency.getText());
+		int subLat = Integer.parseInt(subLatency.getText());
+		int mulLat = Integer.parseInt(mulLatency.getText());
+		int divLat = Integer.parseInt(mulLatency.getText());
+		int ldLat = Integer.parseInt(loadLatency.getText());
+		int stLat = Integer.parseInt(storeLatency.getText());
+		processor = new Processor(program, addLat, mulLat, subLat, divLat, ldLat, stLat);
     	updateInfo();
     }
 
