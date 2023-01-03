@@ -8,7 +8,7 @@ public class Main {
 
 	public static void main(String[] args) throws FileNotFoundException {
 		Parser p = new Parser();
-		ArrayList<String> arr = p.readProgram(new File("StationTest.txt"));
+		ArrayList<String> arr = p.readProgram(new File("HusseinTest1.txt"));
 		Program program = p.parse(arr);
 		Processor processor = new Processor(program);
 		

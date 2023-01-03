@@ -216,7 +216,7 @@ public class Processor {
 
 		if (dependencies.isEmpty()) {
 //			System.out.println("no finished slots");
-			publishSummary += " No Instructions are publishing on the bus\n";
+			publishSummary += " No Instructions are publishing on the bus ";
 			return;
 		}
 
@@ -232,6 +232,9 @@ public class Processor {
 //		}
 		
 		publish(finishedSlots.get(maxIdx));
+		
+		publishSummary += "Dependencies " + maxIdx + "\n";
+		
 
 		// Old Comments if i missed something (Hussein Ebrahim)
 		// .///////////////Publish on BUS
@@ -331,7 +334,11 @@ public class Processor {
 		bus.setValue(result);
 		bus.sourceID = id;
 		
-		publishSummary += " instruction " +  program.getInstructionQueue()[((Reservation) slot).index] + " started publishing on the bus\n";
+		publishSummary += " instruction " +  ((slot.getClass().getSimpleName().equals("Reservation") == true)? 
+				program.getInstructionQueue()[((Reservation) slot).index]
+						:
+				program.getInstructionQueue()[((LoadBuffer) slot).index]
+		) + " started publishing on the bus ";
 		
 
 		return;
@@ -655,6 +662,31 @@ public class Processor {
 		instruction.setEndExec(cycle + 1 + lb.latency);
 		buffer.index = pc;
 		// Started Executing from the next Cycle iam in directly
+	}
+	
+	public ReservationStation getAddStation()
+	{
+		return addStation;
+	}
+	
+	public ReservationStation getMulStation()
+	{
+		return mulStation;
+	}
+	
+	public LoadBuffers getLoadStation()
+	{
+		return lb;
+	}
+	
+	public StoreBuffers getStoreStation()
+	{
+		return sb;
+	}
+	
+	public RegisterFile getRegisterFile()
+	{
+		return rf;
 	}
 
 }
