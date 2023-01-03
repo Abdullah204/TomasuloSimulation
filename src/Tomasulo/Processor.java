@@ -443,7 +443,7 @@ public class Processor {
 
 	public String getCycleSummary() {
 		String res = "";
-		res += "cycle number " + cycle + ": \n";
+		res += "cycle number " + (cycle - 1) + ": \n"; //To serve GUI shifting bug, was cycle only
 		res += issueSummary;
 		res += executeSummary();
 		res += publishSummary;

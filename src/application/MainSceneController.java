@@ -234,7 +234,6 @@ public class MainSceneController {
 			
 		}
     	
-    	
     	Reservation[] addReservationStation = processor.getAddStation().getStation();
     	Reservation[] mulReservationStation = processor.getMulStation().getStation();
     	
@@ -248,7 +247,7 @@ public class MainSceneController {
 	    		resAddVj1.setText(addReservationStation[i].getVj() + "");
 	    		resAddVk1.setText(addReservationStation[i].getVk() + "");
 	    		if(addReservationStation[i].getQj() != null)
-	    		resAddQk1.setText(addReservationStation[i].getQj().toString());
+	    		resAddQj1.setText(addReservationStation[i].getQj().toString());
 	    		if(addReservationStation[i].getQk() != null)
 	    		resAddQk1.setText(addReservationStation[i].getQk().toString());
     		}
@@ -262,7 +261,7 @@ public class MainSceneController {
 	    		resAddVj2.setText(addReservationStation[i].getVj() + "");
 	    		resAddVk2.setText(addReservationStation[i].getVk() + "");
 	    		if(addReservationStation[i].getQj() != null)
-	    		resAddQk2.setText(addReservationStation[i].getQj().toString());
+	    		resAddQj2.setText(addReservationStation[i].getQj().toString());
 	    		if(addReservationStation[i].getQk() != null)
 	    		resAddQk2.setText(addReservationStation[i].getQk().toString());
     		}
@@ -276,7 +275,7 @@ public class MainSceneController {
 	    		resAddVj3.setText(addReservationStation[i].getVj() + "");
 	    		resAddVk3.setText(addReservationStation[i].getVk() + "");
 	    		if(addReservationStation[i].getQj() != null)
-	    		resAddQk3.setText(addReservationStation[i].getQj().toString());
+	    		resAddQj3.setText(addReservationStation[i].getQj().toString());
 	    		if(addReservationStation[i].getQk() != null)
 	    		resAddQk3.setText(addReservationStation[i].getQk().toString());
     		}
@@ -293,7 +292,7 @@ public class MainSceneController {
 	    		resMulVj1.setText(mulReservationStation[i].getVj() + "");
 	    		resMulVk1.setText(mulReservationStation[i].getVk() + "");
 	            if(mulReservationStation[i].getQj() != null)
-	    		resMulQk1.setText(mulReservationStation[i].getQj().toString());
+	    		resMulQj1.setText(mulReservationStation[i].getQj().toString());
 	            if(mulReservationStation[i].getQk() != null)
 	    		resMulQk1.setText(mulReservationStation[i].getQk().toString());
     		}
@@ -307,7 +306,7 @@ public class MainSceneController {
 		    		resMulVj2.setText(mulReservationStation[i].getVj() + "");
 		    		resMulVk2.setText(mulReservationStation[i].getVk() + "");
 		            if(mulReservationStation[i].getQj() != null)
-		    		resMulQk2.setText(mulReservationStation[i].getQj().toString());
+		    		resMulQj2.setText(mulReservationStation[i].getQj().toString());
 		            if(mulReservationStation[i].getQk() != null)
 		    		resMulQk2.setText(mulReservationStation[i].getQk().toString());
     		}
@@ -329,7 +328,7 @@ public class MainSceneController {
 		System.out.println(filePath);
 		Program program = p.parse(arr);
 		processor = new Processor(program);
-    	//updateInfo();
+    	updateInfo();
     }
 
 }
