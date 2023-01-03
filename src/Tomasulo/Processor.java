@@ -26,7 +26,6 @@ public class Processor {
 		pc = 0;
 		addStation = new ReservationStation(3, StationType.ADD, 3);
 		mulStation = new ReservationStation(2, StationType.MUL, 3);
-		// TODO Auto-generated constructor stub
 		sb = new StoreBuffers(3, 2); // We are assuming CACHE takes 2 cycles
 		lb = new LoadBuffers(3, 2);
 		rf = new RegisterFile();
@@ -40,7 +39,6 @@ public class Processor {
 		pc = 0;
 		addStation = new ReservationStation(3, StationType.ADD, addsub);
 		mulStation = new ReservationStation(2, StationType.MUL, muldiv);
-		// TODO Auto-generated constructor stub
 		sb = new StoreBuffers(3, 2); // We are assuming CACHE takes 2 cycles
 		lb = new LoadBuffers(3, 2);
 		rf = new RegisterFile();
@@ -62,7 +60,7 @@ public class Processor {
 
 		if (pc >= program.getInstructionQueue().length && allStationsEmpty())
 			return false;
-		checkExecution(); // end cycle --> start + latency
+		checkExecution(); 
 		boolean issueSuccessful = tryIssue();
 		checkPublish();
 		checkBus();
@@ -229,7 +227,6 @@ public class Processor {
 		}
 
 		if (dependencies.isEmpty()) {
-//			System.out.println("no finished slots");
 			publishSummary += " No Instructions are publishing on the bus\n";
 			return;
 		}
@@ -239,23 +236,15 @@ public class Processor {
 		Integer maxIdx = dependencies.indexOf(maxVal);
 
 		// Now iam Published
-		// System.out.println(finishedSlots.get(maxIdx));
-//		System.out.println("finished slots: \n");
-//		for (Object x : finishedSlots) {
-//			System.out.println(x);
-//		}
+
 
 		publish(finishedSlots.get(maxIdx));
 
-		// Old Comments if i missed something (Hussein Ebrahim)
-		// .///////////////Publish on BUS
-		//////////// GET the Value
-		// bus.value = result;
+]
 
 	}
 
 	public void checkFinishedStores() {
-		// TODO Auto-generated method stub
 		for (StoreBuffer b : sb.getStation())
 			if (program.getInstructionQueue()[b.index].endExec == cycle)
 				b.setBusy(false);
@@ -352,7 +341,6 @@ public class Processor {
 	}
 
 	public Integer countDependencies(ReservationID id) {
-		// TODO Auto-generated method stub
 		int ans = 0;
 		for (Reservation res : addStation.getStation()) {
 			if ((res.getQj() != null && res.getQj().equals(id)) || (res.getQk() != null && res.getQk().equals(id))) {
@@ -383,26 +371,22 @@ public class Processor {
 	}
 
 	public void storeBufferCheckExecution() {
-		// TODO Auto-generated method stub
-		// LATENCY
+
 		for (StoreBuffer buff : sb.getStation()) {
 			if (buff.getQ() == null && buff.busy == true) {
 				int instructionLocation = buff.index;
 				Instruction instruction = program.getInstructionQueue()[instructionLocation];
 				if (instruction.startExec == -1) {
-					System.out.println("da5alt");
 					instruction.setStartExec(cycle);
 					instruction.setEndExec(cycle + sb.latency);
 				}
 
-				// Start EXECUTING
 			}
 		}
 
 	}
 
 	public void ALUCheckExecution(int i) {
-		// TODO Auto-generated method stub
 		ReservationStation curr = (i == 0) ? addStation : mulStation;
 		for (Reservation res : curr.getStation()) {
 			if (res.getQj() == null && res.getQk() == null && res.busy == true) {
@@ -468,7 +452,6 @@ public class Processor {
 	}
 
 	public String printProgram() {
-		// TODO Auto-generated method stub
 		return "program: \n" + program.toString();
 	}
 
@@ -532,7 +515,6 @@ public class Processor {
 			yes = issueStoreBuffer();
 		} else {
 			yes = false;
-			System.out.println("bug");
 		}
 
 		if (yes)
@@ -626,7 +608,6 @@ public class Processor {
 	}
 
 	public void prepareInstructionStore(Instruction instruction, StoreBuffer buffer) {
-		// TODO Auto-generated method stub
 		int rs = getRegisterIndex(instruction.rs);
 		int A = rf.getValueInteger(rs) + instruction.offset;
 		buffer.setA(A);
