@@ -2,8 +2,12 @@ package application;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
+import Tomasulo.Parser;
+import Tomasulo.Processor;
+import Tomasulo.Program;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
@@ -13,8 +17,27 @@ import javafx.event.ActionEvent;
 
 
 public class MainSceneController {
+	
+	static Processor processor;
+	static String filePath;
+    
     @FXML
-    private TextArea instructionsFile;
+    private TextArea summary;
+
+    @FXML
+    private TextArea addReservationStation;
+
+    @FXML
+    private TextArea mulReservationStation;
+
+    @FXML
+    private TextArea storeBuffer;
+
+    @FXML
+    private TextArea loadBuffer;
+
+    @FXML
+    private TextArea registerFile;
 	
 	String readFile(String filePath) {
 		String fileText = "";
@@ -35,19 +58,31 @@ public class MainSceneController {
 
 
     @FXML
-    void OnLoad(ActionEvent event) {
+    void onLoad(ActionEvent event) {
     	FileChooser fc = new FileChooser();
     	fc.getExtensionFilters().add(new ExtensionFilter("TXT File", "*.txt"));
     	File f = fc.showOpenDialog(null);
-    	String fileText = "";
     	if(f != null) {
-    		fileText = readFile(f.toString());
+    		filePath = f.toString();
     	}
-    	instructionsFile.setText(fileText);	
+    	
     }
 
     @FXML
     void nextCycleClick(MouseEvent event) {
+    	processor.next();
+    	summary.setText(summary.getText() + processor.printCycle() + "\n" + "\n");
+    }
+    
+
+    @FXML
+    void onStart(ActionEvent event) throws FileNotFoundException {
+
+    	Parser p = new Parser();
+		ArrayList<String> arr = p.readProgram(new File(filePath));
+		Program program = p.parse(arr);
+		processor = new Processor(program);
+    	summary.setText(summary.getText() + processor.printCycle() + "\n" + "\n");
 
     }
 
