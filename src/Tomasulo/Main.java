@@ -10,7 +10,7 @@ public class Main {
 		Parser p = new Parser();
 		ArrayList<String> arr = p.readProgram(new File("StationTest.txt"));
 		Program program = p.parse(arr);
-		Processor processor = new Processor(program,2,7);
+		Processor processor = new Processor(program,2,2,2,2);
 		
 		Scanner sc = new Scanner(System.in);
 		//processor.checkPublish();

@@ -32,15 +32,15 @@ public class Processor {
 		memory = new Memory(2048);
 	}
 	
-	public Processor(Program program , int muldiv , int addsub) {
+	public Processor(Program program , int addsub , int muldiv , int ld , int str) {
 		this.program = program;
 		bus = new Bus();
 		cycle = 1;
 		pc = 0;
 		addStation = new ReservationStation(3, StationType.ADD, addsub);
 		mulStation = new ReservationStation(2, StationType.MUL, muldiv);
-		sb = new StoreBuffers(3, 2); // We are assuming CACHE takes 2 cycles
-		lb = new LoadBuffers(3, 2);
+		sb = new StoreBuffers(3, str); // We are assuming CACHE takes 2 cycles
+		lb = new LoadBuffers(3, ld);
 		rf = new RegisterFile();
 		memory = new Memory(2048);
 	}
@@ -240,7 +240,7 @@ public class Processor {
 
 		publish(finishedSlots.get(maxIdx));
 
-]
+
 
 	}
 
